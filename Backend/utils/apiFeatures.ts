@@ -1,30 +1,29 @@
-import { Model, Document, Query, UpdateQuery, FilterQuery, PopulateOptions, QueryOptions,  } from 'mongoose';
-
-type SortDirection = 'asc' | 'desc';
+import { Document, Query } from 'mongoose';
 
 class APIFeatures<T extends Document> {
-  query: QueryOptions<T>;
-  queryString: any;
+  query: Query<T[], T>;
+  queryString: Record<string, any>;
 
-  constructor(query: QueryOptions<T>, queryString: any) {
+  constructor(query: Query<T[], T>, queryString: Record<string, any>) {
     this.query = query;
     this.queryString = queryString;
   }
 
-  filter(): this {
-    const queryObj: any = { ...this.queryString };
+  filter() {
+    const queryObj: Record<string, any> = { ...this.queryString };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach((el: string) => delete queryObj[el]);
+    excludedFields.forEach((el) => delete queryObj[el]);
 
+    // 1B) Advanced filtering
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match: string) => `$${match}`);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
     this.query = this.query.find(JSON.parse(queryStr));
 
     return this;
   }
 
-  sort(): this {
+  sort() {
     if (this.queryString.sort) {
       const sortBy = this.queryString.sort.split(',').join(' ');
       this.query = this.query.sort(sortBy);
@@ -35,7 +34,7 @@ class APIFeatures<T extends Document> {
     return this;
   }
 
-  limitFields(): this {
+  limitFields() {
     if (this.queryString.fields) {
       const fields = this.queryString.fields.split(',').join(' ');
       this.query = this.query.select(fields);
@@ -46,16 +45,15 @@ class APIFeatures<T extends Document> {
     return this;
   }
 
-  paginate(): this {
-    const page = this.queryString.page * 1 || 1;
-    const limit = this.queryString.limit * 1 || 100;
+  paginate() {
+    const page = parseInt(this.queryString.page, 10) || 1;
+    const limit = parseInt(this.queryString.limit, 10) || 100;
     const skip = (page - 1) * limit;
 
-    // @ts-ignore
-    this.query = this.query.skip(skip).limit(limit) ;
+    this.query = this.query.skip(skip).limit(limit);
 
     return this;
   }
 }
 
-export default APIFeatures;
+export = APIFeatures;
