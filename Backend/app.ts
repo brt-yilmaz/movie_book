@@ -1,14 +1,14 @@
 import express , { Application, RequestHandler, Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
-import { fileURLToPath } from "url";
 import rateLimit from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
 import AppError from "./utils/appError";
+import globalErrorHandler from "./utils/globalErrorHandler";
+import { fileURLToPath } from "url";
 
 // CONFIGURATIONS
 
@@ -22,7 +22,6 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan("common"));
 app.options("*", cors());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -50,5 +49,7 @@ app.disable('x-powered-by')
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+
+app.use(globalErrorHandler)
 
 export default app;
