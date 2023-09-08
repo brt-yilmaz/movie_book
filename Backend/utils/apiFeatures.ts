@@ -54,6 +54,12 @@ class APIFeatures<T extends Document> {
 
     return this;
   }
+
+  async lean() {
+    return await this.query.lean(); 
+    // .lean() makes the query faster but you cant use methods (.save() etc)
+    // populate and virtual populate works with .lean()
+  }
 }
 
 export = APIFeatures;
