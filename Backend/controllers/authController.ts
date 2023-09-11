@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import { Request, Response } from 'express';
-import { Document } from 'mongoose';
+import { UserDocument} from 'mongoose';
 
 
 
@@ -17,19 +17,8 @@ const signToken = (id: ObjectId): string => {
   return jwt.sign({id}, (process.env.JWT_SECRET || ''), signOptions);
 };
 
-
-interface userDocument extends Document {
-  name?: string | undefined;
-  email?: string | undefined;
-  password?: string | undefined;
-  passwordConfirm?: string | undefined;
-  correctPassword?: (candidatePassword: string, userPassword: string) => boolean | undefined;
-  changedPasswordAfter?: (JWTTimestamp: number) => boolean | undefined;
-  createPasswordResetToken?: () => string | undefined;
-}
-
 const createSendToken = (
-  user: userDocument,
+  user: UserDocument,
   statusCode: number,
   req: Request,
   res: Response
@@ -84,29 +73,11 @@ export const login = catchAsync(async (req, res, next) => {
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
 
-  if (!user || !(await user.correctPassword(password, user.password))) {
+  if (!user || !(await user?.correctPassword?.(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
 
   // 3) If everything ok, send token to client
   createSendToken(user, 200, req, res);
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+});
