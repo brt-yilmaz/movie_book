@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import validator from 'validator';
 import mongoose, { Document, Model} from 'mongoose';
 import { Schema, InferSchemaType } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
     name: { 
@@ -34,6 +35,10 @@ const userSchema = new mongoose.Schema({
     }
 
 })
+
+userSchema.methods.correctPassword = async function(candidatePassword: string, userPassword: string): Promise<boolean> {
+    return await bcrypt.compare(candidatePassword, userPassword);
+}
 
 
 

@@ -23,6 +23,9 @@ interface userDocument extends Document {
   email?: string | undefined;
   password?: string | undefined;
   passwordConfirm?: string | undefined;
+  correctPassword?: (candidatePassword: string, userPassword: string) => boolean | undefined;
+  changedPasswordAfter?: (JWTTimestamp: number) => boolean | undefined;
+  createPasswordResetToken?: () => string | undefined;
 }
 
 const createSendToken = (
@@ -70,6 +73,25 @@ export const signup = catchAsync(async (req, res, next) => {
 
   createSendToken(newUser, 201, req, res);
 })
+
+export const login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // 1) Check if email and password exist
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password!', 400));
+  }
+  // 2) Check if user exists && password is correct
+  const user = await User.findOne({ email }).select('+password');
+
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError('Incorrect email or password', 401));
+  }
+
+  // 3) If everything ok, send token to client
+  createSendToken(user, 200, req, res);
+
+}
 
 
 
