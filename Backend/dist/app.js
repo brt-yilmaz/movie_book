@@ -12,6 +12,8 @@ const express_mongo_sanitize_1 = __importDefault(require("express-mongo-sanitize
 const compression_1 = __importDefault(require("compression"));
 const appError_1 = __importDefault(require("./utils/appError"));
 const globalErrorHandler_1 = __importDefault(require("./utils/globalErrorHandler"));
+const hpp_1 = __importDefault(require("hpp"));
+const xss_1 = __importDefault(require("xss"));
 // CONFIGURATIONS
 const app = (0, express_1.default)();
 app.enable('trust proxy');
@@ -20,10 +22,25 @@ app.use(express_1.default.urlencoded({ extended: true, limit: '10kb' }));
 app.use((0, cors_1.default)());
 // Set security HTTP headers
 app.use((0, helmet_1.default)());
+if (process.env.NODE_ENV === 'development') {
+    app.use((0, morgan_1.default)('dev'));
+}
 app.use((0, morgan_1.default)("common"));
 app.options("*", (0, cors_1.default)());
 // Data sanitization against NoSQL query injection
 app.use((0, express_mongo_sanitize_1.default)());
+var html = (0, xss_1.default)('<script>alert("xss");</script>');
+// Prevent parameter pollution
+app.use((0, hpp_1.default)({
+    whitelist: [
+        'duration',
+        'ratingsQuantity',
+        'ratingsAverage',
+        'maxGroupSize',
+        'difficulty',
+        'price'
+    ]
+}));
 app.use((0, compression_1.default)());
 // Test middleware
 app.use((req, res, next) => {

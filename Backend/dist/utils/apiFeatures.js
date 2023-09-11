@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 class APIFeatures {
     query;
     queryString;
@@ -11,6 +10,7 @@ class APIFeatures {
         const queryObj = { ...this.queryString };
         const excludedFields = ['page', 'sort', 'limit', 'fields'];
         excludedFields.forEach((el) => delete queryObj[el]);
+        // 1B) Advanced filtering
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
         this.query = this.query.find(JSON.parse(queryStr));
@@ -37,12 +37,16 @@ class APIFeatures {
         return this;
     }
     paginate() {
-        const page = this.queryString.page * 1 || 1;
-        const limit = this.queryString.limit * 1 || 100;
+        const page = parseInt(this.queryString.page, 10) || 1;
+        const limit = parseInt(this.queryString.limit, 10) || 100;
         const skip = (page - 1) * limit;
-        // @ts-ignore
         this.query = this.query.skip(skip).limit(limit);
         return this;
     }
+    async lean() {
+        return await this.query.lean();
+        // .lean() makes the query faster but you cant use methods (.save() etc)
+        // populate and virtual populate works with .lean()
+    }
 }
-exports.default = APIFeatures;
+module.exports = APIFeatures;

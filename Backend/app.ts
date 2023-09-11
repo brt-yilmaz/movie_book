@@ -1,14 +1,14 @@
-import express , { Application, RequestHandler, Request, Response, NextFunction } from "express";
+import express , { Application, RequestHandler, Request } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import path from "path";
 import rateLimit from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
 import AppError from "./utils/appError";
 import globalErrorHandler from "./utils/globalErrorHandler";
-import { fileURLToPath } from "url";
+import hpp from 'hpp'
+import xss from "xss";
 
 // CONFIGURATIONS
 
@@ -20,11 +20,35 @@ app.use(cors());
 
 // Set security HTTP headers
 app.use(helmet());
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
 app.use(morgan("common"));
 app.options("*", cors());
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
+
+var html = xss('<script>alert("xss");</script>');
+
+// Prevent parameter pollution
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price'
+    ]
+    
+  })
+);
+
+
 
 app.use(compression());
 
