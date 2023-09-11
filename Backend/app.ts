@@ -9,11 +9,15 @@ import AppError from "./utils/appError";
 import globalErrorHandler from "./utils/globalErrorHandler";
 import hpp from 'hpp'
 import xss from "xss";
+import cookieParser from "cookie-parser";
+import userRouter from './routes/userRouter'
+
+
 
 // CONFIGURATIONS
 
 const app: Application = express();
-app.enable('trust proxy');
+// app.enable('trust proxy');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true,  limit: '10kb'}));
 app.use(cors());
@@ -44,11 +48,9 @@ app.use(
       'difficulty',
       'price'
     ]
-    
+
   })
 );
-
-
 
 app.use(compression());
 
@@ -67,8 +69,12 @@ const limiter: RequestHandler = rateLimit({
 
 app.use("/api", limiter);
 app.disable('x-powered-by')
+app.use(cookieParser());
+
+
 
 // ROUTES
+app.use('/api/v1/users', userRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import validator from 'validator';
-import mongoose from 'mongoose';
+import mongoose, { Document, Model} from 'mongoose';
 import { Schema, InferSchemaType } from 'mongoose';
 
 const userSchema = new mongoose.Schema({
@@ -34,3 +34,8 @@ const userSchema = new mongoose.Schema({
     }
 
 })
+
+
+
+const User = mongoose.model('User', userSchema);
+export default User;
