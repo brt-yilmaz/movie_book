@@ -3,10 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signup = void 0;
+exports.login = exports.signup = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserModel_1 = __importDefault(require("../models/UserModel"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
+const appError_1 = __importDefault(require("../utils/appError"));
 const signToken = (id) => {
     const signOptions = {
         expiresIn: process.env.JWT_EXPIRES_IN || '30d',
@@ -43,4 +44,18 @@ exports.signup = (0, catchAsync_1.default)(async (req, res, next) => {
         passwordConfirm: req.body.passwordConfirm
     });
     createSendToken(newUser, 201, req, res);
+});
+exports.login = (0, catchAsync_1.default)(async (req, res, next) => {
+    const { email, password } = req.body;
+    // 1) Check if email and password exist
+    if (!email || !password) {
+        return next(new appError_1.default('Please provide email and password!', 400));
+    }
+    // 2) Check if user exists && password is correct
+    const user = await UserModel_1.default.findOne({ email }).select('+password');
+    if (!user || !(await user?.correctPassword?.(password, user.password))) {
+        return next(new appError_1.default('Incorrect email or password', 401));
+    }
+    // 3) If everything ok, send token to client
+    createSendToken(user, 200, req, res);
 });
