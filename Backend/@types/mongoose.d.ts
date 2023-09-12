@@ -10,5 +10,6 @@ declare module 'mongoose' {
     changedPasswordAfter?: (JWTTimestamp: number) => boolean | undefined;
     createPasswordResetToken?: () => string | undefined;
     passwordChangedAt: number | undefined;
+    role?: 'user' | 'admin' | 'co-admin';
   }
 }
