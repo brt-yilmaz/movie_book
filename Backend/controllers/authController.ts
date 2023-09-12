@@ -4,7 +4,7 @@ import User from '../models/UserModel';
 import { ObjectId } from 'mongodb';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { UserDocument} from 'mongoose';
 
 
@@ -131,6 +131,34 @@ export const protect = catchAsync(async (req: Request, res: Response, next): Pro
   
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
+  res.locals.user = currentUser;
   next();
 
 });
+
+// To check if user is logged in or not
+
+export const isLoggedIn = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  if (req.cookies.jwt) {
+    try {
+      // 1) verify token
+      const decoded = await jwt.verify(req.cookies.jwt, process.env.JWT_SECRET || '') as JwtPayload;
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+      // 3) Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter?.(decoded.iat as number)) {
+        return next();
+      }
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
+  next();
+}
+

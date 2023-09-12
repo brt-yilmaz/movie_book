@@ -9,4 +9,6 @@ const router = express_1.default.Router();
 router.post("/signup", authController_1.signup);
 router.post("/login", authController_1.login);
 router.get("/logout", authController_1.logout);
+// Protect all routes after this middleware
+router.use(authController_1.protect);
 exports.default = router;

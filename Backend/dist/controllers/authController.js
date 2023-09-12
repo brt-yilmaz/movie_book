@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.protect = exports.logout = exports.login = exports.signup = void 0;
+exports.isLoggedIn = exports.protect = exports.logout = exports.login = exports.signup = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const UserModel_1 = __importDefault(require("../models/UserModel"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
@@ -90,5 +90,32 @@ exports.protect = (0, catchAsync_1.default)(async (req, res, next) => {
     }
     // GRANT ACCESS TO PROTECTED ROUTE
     req.user = currentUser;
+    res.locals.user = currentUser;
     next();
 });
+// To check if user is logged in or not
+const isLoggedIn = async (req, res, next) => {
+    if (req.cookies.jwt) {
+        try {
+            // 1) verify token
+            const decoded = await jsonwebtoken_1.default.verify(req.cookies.jwt, process.env.JWT_SECRET || '');
+            // 2) Check if user still exists
+            const currentUser = await UserModel_1.default.findById(decoded.id);
+            if (!currentUser) {
+                return next();
+            }
+            // 3) Check if user changed password after the token was issued
+            if (currentUser.changedPasswordAfter?.(decoded.iat)) {
+                return next();
+            }
+            // THERE IS A LOGGED IN USER
+            res.locals.user = currentUser;
+            return next();
+        }
+        catch (err) {
+            return next();
+        }
+    }
+    next();
+};
+exports.isLoggedIn = isLoggedIn;
