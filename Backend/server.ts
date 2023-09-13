@@ -2,6 +2,7 @@ import express, { Express, Request, Response , Application } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { ErrorRequestHandler } from 'express';
+import sendEmail from './utils/email';
 
 // to avoid uncaughtException
 process.on('uncaughtException', err => {
@@ -43,3 +44,4 @@ const server = app.listen(PORT, () => {
     });
   });
   
+  sendEmail('beratyilmaz3102@gmail.com', 'test', 'test', 'moviebook');
