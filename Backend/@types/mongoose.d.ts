@@ -1,7 +1,12 @@
+import * as mongoose from 'mongoose';
+
+import { ObjectId } from 'mongodb';
+
 declare module 'mongoose' {
   import { Document } from 'mongoose';
 
   interface UserDocument extends Document {
+    _id: mongoose.Types.ObjectId;
     name?: string | undefined;
     email?: string | undefined;
     password?: string | undefined;

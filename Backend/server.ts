@@ -44,4 +44,3 @@ const server = app.listen(PORT, () => {
     });
   });
   
-  sendEmail('beratyilmaz3102@gmail.com', 'test', 'test', 'moviebook');
