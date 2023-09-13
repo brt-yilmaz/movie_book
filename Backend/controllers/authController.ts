@@ -6,6 +6,7 @@ import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import { Request, Response, NextFunction } from 'express';
 import { UserDocument} from 'mongoose';
+import Email from '../utils/email';
 
 
 
@@ -140,6 +141,7 @@ export const protect = catchAsync(async (req: Request, res: Response, next): Pro
 
 export const isLoggedIn = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (req.cookies.jwt) {
+
     try {
       // 1) verify token
       const decoded = await jwt.verify(req.cookies.jwt, process.env.JWT_SECRET || '') as JwtPayload;
@@ -185,7 +187,19 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // 3) Send it to user's email
-  // this will implement later
+  try {
+    const resetURL: string = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+    await new Email(user, resetURL).sendPasswordReset();
+    res.status(200).json({
+      status: 'success',
+      message: 'Token sent to email!'
+    })
+  } catch (err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+    return next(err);
+  }
 
 })
 

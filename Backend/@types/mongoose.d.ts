@@ -16,5 +16,9 @@ declare module 'mongoose' {
     createPasswordResetToken?: () => string | undefined;
     passwordChangedAt: number | undefined;
     role?: 'user' | 'admin' | 'co-admin';
+    passwordChangedAt?: Date | undefined;
+    passwordResetToken?: String | undefined;
+    passwordResetExpires?: Date | undefined;
+    active: boolean | undefined;
   }
 }

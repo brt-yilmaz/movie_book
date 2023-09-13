@@ -1,9 +1,8 @@
-import AWS, { SESClient, SendEmailCommand, SendEmailCommandInput} from '@aws-sdk/client-ses'
+import { SESClient, SendEmailCommand, SendEmailCommandInput} from '@aws-sdk/client-ses'
+import pug from 'pug'
+import htmlToText from 'html-to-text'
 import { SESClientConfig } from '@aws-sdk/client-ses'
-import nodemailer, { Transporter }   from 'nodemailer'
 import dotenv from 'dotenv'
-import path from 'path'
-import { MailOptions } from 'nodemailer/lib/json-transport'
 import { UserDocument } from 'mongoose'
 dotenv.config()
 
@@ -20,41 +19,6 @@ const SES_CONFIG:SESClientConfig = {
 //create SES service object and pass the configuration object
 const sesClient = new SESClient(SES_CONFIG) ;
 
-const sendEmail = async (to: string, subject: string, text: string, name: string) => {
-  const params = {
-    Source: process.env.AWS_SES_EMAIL,
-    Destination: {
-      ToAddresses: [
-        to
-      ],
-    },
-    ReplyToAddresses: [],
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data: '<h1>This is the body of my email!</h1>',
-        },
-        Text: {
-          Charset: "UTF-8",
-          Data: "This is the body of my email!"
-        }
-      },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: `Hello, ${name}!`,
-      }
-    },
-  };
-  try {
-    const sendEmailCommand = new SendEmailCommand(params);
-    const res = await sesClient.send(sendEmailCommand);
-    console.log('Email has been sent!', res);
-  } catch (error) {
-    console.error(error);
-  }
-    
-}
 
 class Email {
   to: string | undefined;
@@ -71,7 +35,12 @@ class Email {
   }
 
   async send(template:string, subject:string) {
-    const html = `<h1>Test</h1>`;
+    // 1) Render HTML based on a pug template
+    const html = pug.renderFile(`${__dirname}/./emailTemplates/${template}.pug`, {
+      firstName: this.firstName,
+      url: this.url,
+      subject,
+    }) ;
     const params = {
       Source: process.env.AWS_SES_EMAIL,
       Destination: {
@@ -84,16 +53,16 @@ class Email {
         Body: {
           Html: {
             Charset: 'UTF-8',
-            Data: '<h1>This is the body of my email!</h1>',
+            Data: html,
           },
           Text: {
             Charset: "UTF-8",
-            Data: "This is the body of my email!"
+            Data: 'hi',
           }
         },
         Subject: {
           Charset: 'UTF-8',
-          Data: `Hello, ${this.firstName}!`,
+          Data: subject,
         }
       },
     };
@@ -107,7 +76,55 @@ class Email {
 
   }
 
+  async sendWelcome() {
+    await this.send('welcome', 'Welcome to the Moviebook!!');
+  }
+
+  async sendPasswordReset() {
+    await this.send(
+      'passwordReset',
+      'Your password reset token (valid for only 10 minutes)'
+    );
+  }
+
 }
+
+
+// const sendEmail = async (to: string, subject: string, text: string, name: string) => {
+//   const params = {
+//     Source: process.env.AWS_SES_EMAIL,
+//     Destination: {
+//       ToAddresses: [
+//         to
+//       ],
+//     },
+//     ReplyToAddresses: [],
+//     Message: {
+//       Body: {
+//         Html: {
+//           Charset: 'UTF-8',
+//           Data: '<h1>This is the body of my email!</h1>',
+//         },
+//         Text: {
+//           Charset: "UTF-8",
+//           Data: "This is the body of my email!"
+//         }
+//       },
+//       Subject: {
+//         Charset: 'UTF-8',
+//         Data: `Hello, ${name}!`,
+//       }
+//     },
+//   };
+//   try {
+//     const sendEmailCommand = new SendEmailCommand(params);
+//     const res = await sesClient.send(sendEmailCommand);
+//     console.log('Email has been sent!', res);
+//   } catch (error) {
+//     console.error(error);
+//   }
+    
+// }
 
 
 
