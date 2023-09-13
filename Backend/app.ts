@@ -11,6 +11,7 @@ import hpp from 'hpp'
 import xss from "xss";
 import cookieParser from "cookie-parser";
 import userRouter from './routes/userRouter'
+import path from "path";
 
 
 
@@ -71,7 +72,8 @@ app.use("/api", limiter);
 app.disable('x-powered-by')
 app.use(cookieParser());
 
-
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, '/views'));
 
 // ROUTES
 app.use('/api/v1/users', userRouter);
