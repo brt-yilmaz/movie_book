@@ -46,6 +46,11 @@ const userSchema = new mongoose.Schema({
       type: Boolean,
       default: true,
       select: false
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+      select: false
     }
 
 })

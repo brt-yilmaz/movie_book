@@ -20,5 +20,6 @@ declare module 'mongoose' {
     passwordResetToken?: String | undefined;
     passwordResetExpires?: Date | undefined;
     active: boolean | undefined;
+    emailVerified: boolean | undefined;
   }
 }

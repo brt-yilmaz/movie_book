@@ -1,5 +1,5 @@
 import express from "express";
-import {signup , login, logout, protect, forgotPassword, resetPassword, updatePassword} from '../controllers/authController';
+import {signup , login, logout, protect, forgotPassword, resetPassword, updatePassword, verifyEmail} from '../controllers/authController';
 
 const router = express.Router();
 
@@ -9,6 +9,8 @@ router.get("/logout", logout);
 
 router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
+router.get('/verifyEmail/:token', verifyEmail);
+
 
 // Protect all routes after this middleware
 router.use(protect);

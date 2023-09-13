@@ -18,39 +18,49 @@ const signToken = (id: ObjectId): string => {
   return jwt.sign({id}, (process.env.JWT_SECRET || ''), signOptions);
 };
 
-const createSendToken = (
+const createSendToken = async(
   user: UserDocument,
   statusCode: number,
   req: Request,
   res: Response
-): void => {
+): Promise<void> => {
   const token: string = signToken(user._id);
 
   const jwtExpiresIn = process.env.JWT_COOKIE_EXPIRES_IN || '30d';
 
-// Check if jwtExpiresIn is a number; if not, convert it to a number
-const expiresIn =
-  typeof jwtExpiresIn === 'number'
-    ? jwtExpiresIn
-    : Number(jwtExpiresIn) * 24 * 60 * 60 * 1000;
+  // Check if jwtExpiresIn is a number; if not, convert it to a number
+  const expiresIn =
+    typeof jwtExpiresIn === 'number'
+      ? jwtExpiresIn
+      : Number(jwtExpiresIn) * 24 * 60 * 60 * 1000;
 
-res.cookie('jwt', token, {
-  expires: new Date(Date.now() + expiresIn),
-  httpOnly: true, // Make sure to add the httpOnly option
-  secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
-});
-
-
-  // Remove password from output
-  user.password = undefined;
-
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: {
-      user
-    }
+  res.cookie('jwt', token, {
+    expires: new Date(Date.now() + expiresIn),
+    httpOnly: true, // Make sure to add the httpOnly option
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
   });
+
+  if(!user.emailVerified) {
+    const verifyURL: string = `${req.protocol}://${req.get('host')}/api/v1/users/verifyEmail/${token}`;
+    await new Email(user, verifyURL).sendWelcome();
+
+    res.status(statusCode).json({
+      status: 'success',
+      message: 'Email sent'
+    })
+  } else {
+    // Remove password from output
+    user.password = undefined;
+
+    res.status(statusCode).json({
+      status: 'success',
+      token,
+      data: {
+        user
+      }
+    });
+  }
+
 };
 
 export const signup = catchAsync(async (req, res, next) => {
@@ -62,6 +72,24 @@ export const signup = catchAsync(async (req, res, next) => {
   });
 
   createSendToken(newUser, 201, req, res);
+})
+
+export const verifyEmail = catchAsync(async (req, res, next) => {
+  const token = req.params.token;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET || '') as JwtPayload;;
+
+  const currentUser = await User.findById(decoded.id );
+  if (!currentUser) {
+    return next(new AppError('User not found', 404));
+  }
+  currentUser.emailVerified = true;
+  await currentUser.save( { validateBeforeSave: false } );
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Email verified'
+  })
+
 })
 
 export const login = catchAsync(async (req, res, next) => {
@@ -76,6 +104,10 @@ export const login = catchAsync(async (req, res, next) => {
 
   if (!user || !(await user?.correctPassword?.(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
+  }
+
+  if (!user.emailVerified) {
+    return next(new AppError('Please verify your email before logging in', 401));
   }
 
   // 3) If everything ok, send token to client
