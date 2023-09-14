@@ -26,20 +26,6 @@ const createSendToken = async(
 ): Promise<void> => {
   const token: string = signToken(user._id);
 
-  const jwtExpiresIn = process.env.JWT_COOKIE_EXPIRES_IN || '30d';
-
-  // Check if jwtExpiresIn is a number; if not, convert it to a number
-  const expiresIn =
-    typeof jwtExpiresIn === 'number'
-      ? jwtExpiresIn
-      : Number(jwtExpiresIn) * 24 * 60 * 60 * 1000;
-
-  res.cookie('jwt', token, {
-    expires: new Date(Date.now() + expiresIn),
-    httpOnly: true, // Make sure to add the httpOnly option
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
-  });
-
   if(!user.emailVerified) {
     const verifyURL: string = `${req.protocol}://${req.get('host')}/api/v1/users/verifyEmail/${token}`;
     await new Email(user, verifyURL).sendWelcome();
@@ -49,6 +35,21 @@ const createSendToken = async(
       message: 'Email sent'
     })
   } else {
+
+    const jwtExpiresIn = process.env.JWT_COOKIE_EXPIRES_IN || '30d';
+
+    // Check if jwtExpiresIn is a number; if not, convert it to a number
+    const expiresIn =
+      typeof jwtExpiresIn === 'number'
+        ? jwtExpiresIn
+        : Number(jwtExpiresIn) * 24 * 60 * 60 * 1000;
+  
+    res.cookie('jwt', token, {
+      expires: new Date(Date.now() + expiresIn),
+      httpOnly: true, // Make sure to add the httpOnly option
+      secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+    });
+
     // Remove password from output
     user.password = undefined;
 
