@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
       type: String,
-      enum: ['user', 'guide', 'lead-guide', 'admin'],
+      enum: ['user', 'co-admin', 'admin'],
       default: 'user'
     },
     passwordChangedAt: Date,
@@ -53,7 +53,12 @@ const userSchema = new mongoose.Schema({
       select: false
     }
 
-})
+},
+{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
+}
+)
 
 userSchema.pre('save', async function(next) {
   // Only run this function if password was actually modified

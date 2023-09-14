@@ -36,6 +36,7 @@ app.options("*", cors());
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 
+
 var html = xss('<script>alert("xss");</script>');
 
 // Prevent parameter pollution
