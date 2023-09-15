@@ -22,6 +22,7 @@ declare module 'mongoose' {
     passwordResetExpires?: Date | undefined;
     active: boolean | undefined;
     emailVerified: boolean | undefined;
+    photo?: string | undefined;
     
   }
 
