@@ -81,3 +81,5 @@ reviewSchema.post('save', async function () {
 
 
 const Review = mongoose.model<ReviewDocument>("Review", reviewSchema) ;
+
+export default Review
