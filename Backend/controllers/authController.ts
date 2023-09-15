@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import { Request, Response, NextFunction } from 'express';
-import { UserDocument} from 'mongoose';
+import { UserDocument, HydratedDocument} from 'mongoose';
 import Email from '../utils/email';
 
 
@@ -19,7 +19,7 @@ const signToken = (id: ObjectId): string => {
 };
 
 const createSendToken = async(
-  user: UserDocument,
+  user: HydratedDocument<UserDocument>,
   statusCode: number,
   req: Request,
   res: Response
@@ -65,7 +65,7 @@ const createSendToken = async(
 };
 
 export const signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
+  const newUser:HydratedDocument<UserDocument> = await new User({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,

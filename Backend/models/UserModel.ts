@@ -69,7 +69,7 @@ userSchema.pre('save', async function(next) {
     this.password = await bcrypt.hash(this.password, 12);
   }
   // Delete passwordConfirm field
-    (this.passwordConfirm as unknown) = undefined;
+    (this.passwordConfirm as UserDocument["passwordConfirm"]) = undefined;
   next();
 });
 

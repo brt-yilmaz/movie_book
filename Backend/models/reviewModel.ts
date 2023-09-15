@@ -1,7 +1,7 @@
-import mongoose, { ReviewDocument, Model, Schema, Types, Query, ReviewModel} from "mongoose";
+import mongoose, { ReviewDocument, Model, Schema, Types, Query, ReviewModel, HydratedDocument, model} from "mongoose";
 import Movie from "./movieModel";
 
-const reviewSchema = new mongoose.Schema(
+const reviewSchema = new mongoose.Schema<ReviewDocument, ReviewModel>(
   {
   rating: {
     type: Number,
@@ -73,9 +73,11 @@ reviewSchema.statics.calcAverageRatings = async function (movieId: Types.ObjectI
   }
 }
 
-reviewSchema.post('save',  function () {
-   (this as any).constructor.calcAverageRatings(this.movie)
-})
+reviewSchema.post('save', async function () {
+  (this.constructor as ReviewModel).calcAverageRatings(this.movie);
+});
 
 
-const Review = mongoose.model<ReviewDocument, ReviewModel>("Review", reviewSchema);
+
+
+const Review = mongoose.model<ReviewDocument>("Review", reviewSchema) ;

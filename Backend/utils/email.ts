@@ -1,6 +1,5 @@
 import { SESClient, SendEmailCommand, SendEmailCommandInput} from '@aws-sdk/client-ses'
 import pug from 'pug'
-import htmlToText from 'html-to-text'
 import { SESClientConfig } from '@aws-sdk/client-ses'
 import dotenv from 'dotenv'
 import { UserDocument } from 'mongoose'

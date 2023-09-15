@@ -35,6 +35,6 @@ declare module 'mongoose' {
   }
 
   interface ReviewModel extends Model<ReviewDocument> {
-    calcAverageRatings(movieId: ObjectId): Promise<void>;
+    calcAverageRatings(movieId: mongoose.Types.ObjectId): Promise<void>;
   }
 }
