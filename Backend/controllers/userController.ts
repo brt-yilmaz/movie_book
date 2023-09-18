@@ -7,38 +7,101 @@ import catchAsync from "../utils/catchAsync";
 import { Request, Response, NextFunction } from "express";
 import { getOne , getAll , deleteOne , updateOne} from "../utils/factory";
 import { UserDocument, Model} from "mongoose";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import dotenv from 'dotenv'                   
+dotenv.config()
+
+const s3 = new S3Client({
+  region: process.env.AWS_SES_REGION || '',
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+  },
+});
 
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (
   req: Request,
   file: Express.Multer.File,
-  cb: multer.FileFilterCallback 
+  cb: multer.FileFilterCallback
 ) => {
-  if (file.mimetype.startsWith("image")) {
+  if (file.mimetype.startsWith('image')) {
     cb(null, true);
   } else {
-    cb((new AppError("Not an image! Please upload only images.", 400) as any), false);
+    cb((new AppError('Not an image! Please upload only images.', 400) as any), false);
   }
-}
+};
 
 const upload = multer({
   storage: multerStorage,
-  fileFilter: multerFilter
-})
+  fileFilter: multerFilter,
+});
 
-export const uploadUserPhoto = upload.single("photo");
+const uploadToS3 = async (
+  buffer: Buffer,
+  fileName: string,
+  contentType: string
+) => {
+  const command = new PutObjectCommand({
+    Bucket: 'user-photo-nodejs',
+    Key: fileName,
+    Body: buffer,
+    ACL: 'public-read',
+    ContentType: contentType,
+  });
 
-export const resizeUserPhoto = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.file) return next();
+  return s3.send(command);
+};
 
-  req.file.filename = `user-${req.user!.id}-${Date.now()}.jpeg`;
+export const uploadProfilePhotoAndResize = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  upload.single('photo')(req, res, async (err) => {
+    if (err) {
+      return next(err);
+    }
 
-  await sharp(req.file.buffer).resize(500, 500).jpeg({ quality: 90 }).toFile(
-    `public/img/users/${req.file.filename}`
-  )
+    if (!req.file) {
+      return next(new Error('No file uploaded.'));
+    }
 
-})
+    const { buffer, mimetype } = req.file;
+    const fileName = `user-${req.user?.id}-${Date.now()}.jpeg`;
+
+    try {
+      const processedImage = await sharp(buffer)
+        .resize({ width: 500, height: 500 })
+        .jpeg({ quality: 90 })
+        .toBuffer();
+
+      await uploadToS3(processedImage, fileName, mimetype);
+
+      req.file = {
+        ...req.file,
+        filename: fileName,
+        s3URL: `https://user-photo-nodejs.s3.amazonaws.com/${fileName}`,
+      } as Express.Multer.File;
+    } catch (error) {
+      return next(new Error('Error processing image.'));
+    }
+
+    const user = req.user as UserDocument | undefined;
+    if(user) {
+      user.photo = (req.file as any).s3URL ;
+      await user.save({ validateBeforeSave: false });
+    }
+   
+    res.status(200).json({
+      status: 'success',
+      data: {
+        s3URL: (req.file as any).s3URL,
+      },
+    });
+  });
+};
 
 const filterObj = (obj: Record<string, any>, ...allowedFields: string[]) => {
   const newObj: Record<string, any> = {};

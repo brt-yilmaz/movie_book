@@ -1,8 +1,8 @@
 import { SESClient, SendEmailCommand, SendEmailCommandInput} from '@aws-sdk/client-ses'
 import pug from 'pug'
 import { SESClientConfig } from '@aws-sdk/client-ses'
-import dotenv from 'dotenv'
 import { UserDocument } from 'mongoose'
+import dotenv from 'dotenv'                   
 dotenv.config()
 
 const {AWS_SES_ACCESS_KEY_ID, AWS_SES_SECRET_ACCESS_KEY, AWS_SES_REGION } = process.env;

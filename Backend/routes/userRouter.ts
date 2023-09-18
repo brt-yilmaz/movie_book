@@ -1,5 +1,6 @@
 import express from "express";
 import {signup , login, logout, protect, forgotPassword, resetPassword, updatePassword, verifyEmail, restrictTo} from '../controllers/authController';
+import { uploadProfilePhotoAndResize } from "../controllers/userController";
 
 const router = express.Router();
 
@@ -16,6 +17,8 @@ router.get('/verifyEmail/:token', verifyEmail);
 router.use(protect);
 
 router.patch('/updateMyPassword', updatePassword);
+router.patch("/uploadProfilePhoto", uploadProfilePhotoAndResize)
+
 
 
 export default router;
