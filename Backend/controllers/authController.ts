@@ -65,7 +65,7 @@ const createSendToken = async(
 };
 
 export const signup = catchAsync(async (req, res, next) => {
-  const newUser:HydratedDocument<UserDocument> = await new User({
+  const newUser:HydratedDocument<UserDocument> = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
