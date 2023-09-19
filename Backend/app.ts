@@ -10,8 +10,10 @@ import globalErrorHandler from "./utils/globalErrorHandler";
 import hpp from 'hpp'
 import xss from "xss";
 import cookieParser from "cookie-parser";
-import userRouter from './routes/userRouter'
+import userRouter from './routes/userRouters'
 import path from "path";
+import reviewRouter from './routes/reviewRouters'
+import movieRouter from './routes/movieRouters'
 
 
 
@@ -78,6 +80,9 @@ app.set('views', path.join(__dirname, '/views'));
 
 // ROUTES
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/movies', movieRouter);
+
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

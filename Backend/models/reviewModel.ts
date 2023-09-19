@@ -41,7 +41,14 @@ reviewSchema.pre<Query<ReviewDocument,ReviewDocument>>(/^find/, function (next) 
   this.populate({
     path: 'user',
     select: 'name photo'
+  })
+  
+  /*
+  .populate({
+    path: 'movie',
+    select: 'title poster'
   });
+  */
   next();
 }
 )
@@ -76,9 +83,6 @@ reviewSchema.statics.calcAverageRatings = async function (movieId: Types.ObjectI
 reviewSchema.post('save', async function () {
   (this.constructor as ReviewModel).calcAverageRatings(this.movie);
 });
-
-
-
 
 const Review = mongoose.model<ReviewDocument>("Review", reviewSchema) ;
 
