@@ -42,7 +42,6 @@ reviewSchema.pre<Query<ReviewDocument,ReviewDocument>>(/^find/, function (next) 
     path: 'user',
     select: 'name photo'
   })
-  
   /*
   .populate({
     path: 'movie',
