@@ -65,7 +65,7 @@ class Email {
     );
   }
 }
-/* with AWS SES, but you must talk with AWS Support and request to be able to use it with (to remove SandBox) unverified email
+/* with AWS SES, but you must talk with AWS Support and request to be able to use it with (to remove SandBox) unverified email option
 
 const {AWS_SES_ACCESS_KEY_ID, AWS_SES_SECRET_ACCESS_KEY, AWS_SES_REGION } = process.env;
 
