@@ -7,27 +7,28 @@ type Signup = {
 
 export async function signup({ fullName, email , password, passwordConfirm}: Signup) {
 
-  const savedUserResponse = await fetch(
-    "http://localhost:3001//api/v1/users/signup",
+ await fetch(
+    "http://localhost:3001/api/v1/users/signup",
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fullName, email , password, passwordConfirm}),
+      body: JSON.stringify({ name: fullName, email , password, passwordConfirm}),
     })
 
    
-    if (savedUserResponse.ok) {
-      const responseBody = await savedUserResponse.json();
-      const { data } = responseBody;
-      const { user } = data;
+    // if (savedUserResponse.ok) {
+    //   const responseBody = await savedUserResponse.json();
+    //   console.log(responseBody);
+    //   const { data } = responseBody;
+    //   const { user } = data;
 
-      return user;
+    //   return user;
 
-    } else {
-      const errorResponse = await savedUserResponse.json();
-      const errorMessage = errorResponse.message || "Failed to create user.";
-      throw new Error(errorMessage);
-    }
+    // } else {
+    //   const errorResponse = await savedUserResponse.json();
+    //   const errorMessage = errorResponse.message || "Failed to create user.";
+    //   throw new Error(errorMessage);
+    // }
     
 }
 

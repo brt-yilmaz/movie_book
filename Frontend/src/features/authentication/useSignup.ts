@@ -5,8 +5,8 @@ import { useMutation } from "@tanstack/react-query";
 export function useSignup() {
   const { mutate: signup, isLoading } = useMutation({
     mutationFn: signupApi,
-    onSuccess: (user) => {
-      toast.success(`Account successfully created! Please verify the new account from the ${user.email} email address.`);
+    onSuccess: () => {
+      toast.success(`Account successfully created! Please verify the new account from the your email address.`);
     }
   })
 

@@ -21,7 +21,7 @@ type Values = {
     passwordConfirm?: string;
 }
 
-const signupSchema = yup.object().shape({
+const registerSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required(),
   fullName: yup.string().required(),
@@ -54,14 +54,14 @@ const SignupAndLoginForm = () => {
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
-  const isSignup = pageType === "signup";
+  const isSignup = pageType === "register";
   const { signup, isLoading } = useSignup();
 
   const handleFormSubmit = (values : Values ) => {
     if (isSignup) {
       signup(values as typeof initialValuesRegister);
       dispatch(setLogin(values));
-      navigate("/");
+      navigate("/login");
     }
 
     if(isLogin){
@@ -73,7 +73,7 @@ const SignupAndLoginForm = () => {
     <Formik
       onSubmit={handleFormSubmit}
       initialValues ={isLogin ? initialValuesLogin : initialValuesRegister}
-      validationSchema={isLogin ? loginSchema : signupSchema}
+      validationSchema={isLogin ? loginSchema : registerSchema}
     >
       {({ 
         values,
@@ -104,7 +104,7 @@ const SignupAndLoginForm = () => {
                 Boolean(touched.fullName) && Boolean(errors.fullName)
               }
               helperText={touched.fullName && errors.fullName}
-              sx={{ gridColumn: "span 2" }}
+              sx={{ gridColumn: "span 4" }}
             />
             }
             <TextField
@@ -131,15 +131,16 @@ const SignupAndLoginForm = () => {
             {isSignup && 
               <TextField
               label="Confirm Password"
+              type={'password'}
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.passwordConfirm}
-              name="fullName"
+              name="passwordConfirm"
               error={
                 Boolean(touched.passwordConfirm) && Boolean(errors.passwordConfirm)
               }
               helperText={touched.passwordConfirm && errors.passwordConfirm}
-              sx={{ gridColumn: "span 2" }}
+              sx={{ gridColumn: "span 4" }}
             />
             }
 
