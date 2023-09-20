@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state";
 import { useSignup } from "../authentication/useSignup";
+import { useLogin } from "../authentication/useLogin";
 
 type Values = {
     fullName?: string;
@@ -56,16 +57,17 @@ const SignupAndLoginForm = () => {
   const isLogin = pageType === "login";
   const isSignup = pageType === "register";
   const { signup, isLoading } = useSignup();
+  const { login, isLoading: isLoginLoading} = useLogin();
 
   const handleFormSubmit = (values : Values ) => {
     if (isSignup) {
       signup(values as typeof initialValuesRegister);
-      dispatch(setLogin(values));
       navigate("/login");
     }
 
     if(isLogin){
-      dispatch(setLogin(values));
+      login(values as typeof initialValuesLogin);
+      dispatch(setLogin({name:'berat'}));
     }
   }
   
@@ -160,7 +162,7 @@ const SignupAndLoginForm = () => {
                 color: palette.background.paper ,
                 "&:hover": { color: palette.primary.main },
               }}
-              disabled={isLoading}
+              disabled={isLoginLoading || isLoading}
             >
               {isLogin ? "LOGIN" : "SIGN UP"}
             </Button>

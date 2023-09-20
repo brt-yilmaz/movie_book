@@ -32,3 +32,32 @@ export async function signup({ fullName, email , password, passwordConfirm}: Sig
     
 }
 
+type Login = {
+    email: string;
+    password: string;
+}
+
+export async function login({ email, password }: Login) {
+
+  const loginResponse = await fetch(
+    "http://localhost:3001/api/v1/users/login",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    })
+
+    if (loginResponse.ok) {
+      const responseBody = await loginResponse.json();
+      const { data } = responseBody;
+      const { user } = data;
+
+      return user;
+
+    } else {
+      const errorResponse = await loginResponse.json();
+      const errorMessage = errorResponse.message || "Failed to login.";
+      throw new Error(errorMessage);
+    }
+    
+}
