@@ -1,11 +1,6 @@
-type Signup = {
-  fullName: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-}
 
-export async function signup({ fullName, email , password, passwordConfirm}: Signup) {
+
+export async function signup(fullName: string, email: string , password: string, passwordConfirm: string) {
 
  await fetch(
     "http://localhost:3001/api/v1/users/signup",

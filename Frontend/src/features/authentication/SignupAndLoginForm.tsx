@@ -14,7 +14,7 @@ import { useSignup } from "../authentication/useSignup";
 import { useLogin } from "../authentication/useLogin";
 
 type Values = {
-    fullName?: string;
+    name?: string;
     email: string;
     password: string;
     passwordConfirm?: string;
@@ -23,7 +23,7 @@ type Values = {
 const registerSchema = yup.object().shape({
   email: yup.string().email().required(),
   password: yup.string().required(),
-  fullName: yup.string().required(),
+  name: yup.string().required(),
   passwordConfirm: yup.string().required(),
 })
 
@@ -33,7 +33,7 @@ const loginSchema = yup.object().shape({
 })
 
 const initialValuesRegister = {
-  fullName: "",
+  name: "",
   email: "",
   password: "",
   passwordConfirm: "",
@@ -60,6 +60,7 @@ const SignupAndLoginForm = () => {
     if (isSignup) {
       signup(values as typeof initialValuesRegister);
       navigate("/login");
+      setPageType("login");
     }
 
     if(isLogin){
@@ -96,12 +97,12 @@ const SignupAndLoginForm = () => {
               label="Full Name"
               onBlur={handleBlur}
               onChange={handleChange}
-              value={values.fullName}
-              name="fullName"
+              value={values.name}
+              name="name"
               error={
-                Boolean(touched.fullName) && Boolean(errors.fullName)
+                Boolean(touched.name) && Boolean(errors.name)
               }
-              helperText={touched.fullName && errors.fullName}
+              helperText={touched.name && errors.name}
               sx={{ gridColumn: "span 4" }}
             />
             }
