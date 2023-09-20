@@ -1,3 +1,49 @@
+import { useEffect, useState } from "react";
+import { login as loginApi } from "../../services/apiAuth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setLogin } from "../../state";
+
+type Login = {
+  email: string;
+  password: string;
+}
+
+export function useLogin() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const login = async ({ email, password }: Login) => {
+    setIsLoading(true);
+    try {
+      const response = await loginApi({ email, password });
+      
+      dispatch(setLogin(response));
+      navigate('/', { replace: true });
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+  }, []);
+
+  return { login, isLoading };
+}
+
+
+
+
+
+
+
+
+
+/* With React Query
 import { useMutation } from "@tanstack/react-query";
 import { login as loginApi } from "../../services/apiAuth";
 import { useNavigate } from "react-router-dom";
@@ -28,3 +74,4 @@ export function useLogin() {
   return { login, isLoading };
 
 }
+*/

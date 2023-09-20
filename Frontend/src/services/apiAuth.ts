@@ -49,10 +49,9 @@ export async function login({ email, password }: Login) {
 
     if (loginResponse.ok) {
       const responseBody = await loginResponse.json();
-      const { data } = responseBody;
-      const { user } = data;
+     
 
-      return user;
+      return responseBody;
 
     } else {
       const errorResponse = await loginResponse.json();

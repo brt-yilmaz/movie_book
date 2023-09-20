@@ -10,8 +10,6 @@ import {
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setLogin } from "../../state";
 import { useSignup } from "../authentication/useSignup";
 import { useLogin } from "../authentication/useLogin";
 
@@ -51,7 +49,6 @@ const SignupAndLoginForm = () => {
 
   const [pageType, setPageType] = useState("login");
   const { palette } = useTheme();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
@@ -67,7 +64,6 @@ const SignupAndLoginForm = () => {
 
     if(isLogin){
       login(values as typeof initialValuesLogin);
-      dispatch(setLogin({name:'berat'}));
     }
   }
   
