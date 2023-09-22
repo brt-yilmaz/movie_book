@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
-  _id: string;
+  id: string;
   name: string
   email: string;
   role: 'user'| 'co-admin' | 'admin';
   photo: string; 
-  token: string;
 }
 
 interface UserState {
@@ -24,7 +23,9 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setLogin: (state, action: PayloadAction<{ data: { user: User }, token: string }>) => {
-      state.user = action.payload.data.user;
+      const {id, name, email,photo,role} = action.payload.data.user;
+      const filteredObj = {id, name, email,photo,role};
+      state.user = filteredObj
       state.token = action.payload.token;
     },
 
