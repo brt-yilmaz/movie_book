@@ -55,3 +55,7 @@ export async function login({ email, password }: Login) {
     }
     
 }
+
+export async function checkCurrent() {
+
+}

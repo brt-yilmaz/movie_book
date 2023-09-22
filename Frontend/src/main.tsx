@@ -17,6 +17,8 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/es/integration/react";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from './ui/ErrorFallback.tsx';
 
 const persistConfig = {
   key: "root",
@@ -38,10 +40,12 @@ const store = configureStore({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistStore(store)}>
-        <App />
-      </PersistGate>
-    </Provider>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistStore(store)}>
+          <App />
+        </PersistGate>
+      </Provider>
+    </ErrorBoundary>
   </React.StrictMode>
 )

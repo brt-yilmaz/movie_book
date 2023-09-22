@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { login as loginApi } from "../../services/apiAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import { setLogin } from "../../state";
+import { useAppDispatch } from "../../state/store";
+import { setLogin } from "../../state/userSlice";
+
 
 type Login = {
   email: string;
@@ -12,7 +13,7 @@ type Login = {
 
 export function useLogin() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   const login = async ({ email, password }: Login) => {

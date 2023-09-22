@@ -1,6 +1,6 @@
 import { signup as signupApi } from '../../services/apiAuth';
 import { toast } from 'react-hot-toast';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type Signup = {
   name: string;
@@ -25,11 +25,6 @@ export function useSignup() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    // Uncomment the line below if you want the request to be made automatically
-    // signup();
-  }, []);
 
   return { signup, isLoading };
 }
