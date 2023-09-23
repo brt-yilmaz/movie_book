@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { login as loginApi } from "../../services/apiAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -29,9 +29,6 @@ export function useLogin() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-  }, []);
 
   return { login, isLoading };
 }
