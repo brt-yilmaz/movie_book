@@ -23,13 +23,13 @@
 //   Close,
 // } from "@mui/icons-material";
 
-// import { useDispatch, useSelector } from "react-redux";
+// import { useAppDispatch, useAppSelector } from "../../state/store";
 // import { useNavigate } from "react-router-dom";
 // import { setMode, setLogout } from "../../state";
 
 // export default function Navbar() {
 //   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
-//   const dispatch = useDispatch();
+//   const dispatch = useAppDispatch();
 //   const navigate = useNavigate();
 //   const user = useSelector((state) => state.user);
 //   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -44,7 +44,7 @@
 
 
 //   return (
-//     <FlexBetween padding="1rem 6%" bgcolor={paper}>
+//     <FlexBetween padding="1rem 6%" bgcolor={alt}>
 //       <div>Navbar</div>
 //     </FlexBetween>
 //   )

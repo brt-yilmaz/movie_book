@@ -11,11 +11,13 @@ interface User {
 interface UserState {
   user: User | null;
   token: string | null;
+  mode: "light" | "dark";
 }
 
 const initialState: UserState = {
   user: null,
   token: null,
+  mode: "light",
 } 
 
 export const userSlice = createSlice({
@@ -24,7 +26,7 @@ export const userSlice = createSlice({
   reducers: {
     setLogin: (state, action: PayloadAction<{ data: { user: User }, token: string }>) => {
       const {id, name, email,photo,role} = action.payload.data.user;
-      const filteredObj = {id, name, email,photo,role};
+      const filteredObj = {id, name, email, photo, role};
       state.user = filteredObj
       state.token = action.payload.token;
     },
@@ -32,6 +34,10 @@ export const userSlice = createSlice({
     setLogout: (state) => {
       state.user = null;
       state.token = null;
+    },
+
+    setMode: (state) => {
+      state.mode = state.mode === "light" ? "dark" : "light";
     }
   }
 })

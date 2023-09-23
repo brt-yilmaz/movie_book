@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { useSignup } from "../authentication/useSignup";
 import { useLogin } from "../authentication/useLogin";
 
-
 type Values = {
     name?: string;
     email: string;
@@ -47,7 +46,6 @@ const initialValuesLogin = {
 
 
 const SignupAndLoginForm = () => {
-
   const [pageType, setPageType] = useState("login");
   const { palette } = useTheme();
   const navigate = useNavigate();

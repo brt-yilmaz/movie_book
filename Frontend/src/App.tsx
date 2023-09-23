@@ -4,7 +4,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 
 import AppLayout from "./ui/AppLayout";
-import SignupAndLogin from "./pages/SignupAndLogin"
+import LoginForm from "./features/authentication/LoginForm";
 
 const queryClient = new QueryClient(
   {
@@ -26,7 +26,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<AppLayout />} > 
           </Route>
-          <Route path={"/login"} element={<SignupAndLogin/>} />
+          <Route path={"/login"} element={<LoginForm />} />
         </Routes>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
