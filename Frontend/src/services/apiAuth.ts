@@ -2,14 +2,19 @@
 
 export async function signup(fullName: string, email: string , password: string, passwordConfirm: string) {
 
- await fetch(
+ const signUpResponse = await fetch(
     "http://localhost:3001/api/v1/users/signup",
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: fullName, email , password, passwordConfirm}),
-    })
+  })
 
+  if(!signUpResponse.ok) {
+    const errorResponse = await signUpResponse.json();
+    const errorMessage = errorResponse.message || "Failed to create user.";
+    throw new Error(errorMessage);
+  }
    
     // if (savedUserResponse.ok) {
     //   const responseBody = await savedUserResponse.json();
@@ -45,7 +50,6 @@ export async function login({ email, password }: Login) {
     if (loginResponse.ok) {
       const responseBody = await loginResponse.json();
      
-
       return responseBody;
 
     } else {

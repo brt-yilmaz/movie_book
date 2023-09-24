@@ -11,6 +11,7 @@ type Signup = {
 
 export function useSignup() {
   const [isLoading, setIsLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   const signup = async ({ name, email, password, passwordConfirm }: Signup) => {
 
@@ -20,11 +21,12 @@ export function useSignup() {
       await signupApi( name, email, password, passwordConfirm );
       toast.success(`Account successfully created! Please verify the new account from your email address.`);
     } catch (error) {
-      toast.error(`An error occurred: ${(error as Error).message}`);
+      setEmailError((error as Error).message);
+      toast.error(`${(error as Error).message}`);
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { signup, isLoading };
+  return { signup, isLoading, emailError };
 }

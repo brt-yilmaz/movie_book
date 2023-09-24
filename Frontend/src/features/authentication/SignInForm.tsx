@@ -34,9 +34,10 @@ const initialValuesLogin = {
 export default function LoginForm() {
   const navigate = useNavigate();
   const { login, isLoading: isLoginLoading } = useLogin();
+  
 
-  const handleFormSubmit =  (values: LoginValues ) => {
-    login(values);
+  const handleFormSubmit =  async (values: LoginValues ) => {
+   await login(values);
   }
   
 
@@ -96,7 +97,7 @@ export default function LoginForm() {
               value={values.password}
               name="password"
               error={Boolean(touched.password) && Boolean(errors.password)}
-              helperText={touched.password && errors.password}
+              helperText={touched.password && errors.password }
               fullWidth
               autoComplete="current-password"
               required
@@ -132,7 +133,7 @@ export default function LoginForm() {
                       navigate('/signup');
                     }}
                   >
-                    "Don't have an account? Sign Up"
+                    Don't have an account? Sign Up
                   </Link>
                 </Grid>
               </Grid>

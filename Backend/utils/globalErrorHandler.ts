@@ -1,7 +1,7 @@
 import AppError from "./appError";
 import { CastError } from "mongoose";
 import { Error as MongooseError } from 'mongoose'; 
-import { MongoError } from 'mongodb';
+import { MongoError, MongoServerError } from 'mongodb';
 import { Request, Response, NextFunction } from 'express';
 
 const handleCastErrorDB = (err: CastError): AppError => {
@@ -9,8 +9,12 @@ const handleCastErrorDB = (err: CastError): AppError => {
   return new AppError(message, 400);
 };
 
-const handleDuplicateFieldsDB = (err: MongoError) => {
+const handleDuplicateFieldsDB = (err: MongoServerError) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)?.[0];
+  if(err.keyValue.email) {
+    const message = `${err.keyValue.email} already exists!`;
+    return new AppError(message, 400);
+  }
   const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
 };

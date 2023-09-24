@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../state/store";
 import { setLogin } from "../../state/userSlice";
 
 
-type Login = {
+type LoginValues = {
   email: string;
   password: string;
 }
@@ -16,7 +16,7 @@ export function useLogin() {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = async ({ email, password }: Login) => {
+  const login = async ({ email, password }: LoginValues) => {
     setIsLoading(true);
     try {
       const response = await loginApi({ email, password });
@@ -28,6 +28,7 @@ export function useLogin() {
     } finally {
       setIsLoading(false);
     }
+
   };
 
   return { login, isLoading };
