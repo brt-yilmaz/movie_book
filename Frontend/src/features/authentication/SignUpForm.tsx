@@ -28,11 +28,10 @@ const SignUpSchema = yup.object().shape({
     .string()
     .email("Enter a valid email")
     .required("Enter a valid email"),
-  password: yup.string().required("Enter your password"),
-  // check if password matches
+  password: yup.string().min(8 , "Password must be at least 8 characters long").required("Enter your password"),
   passwordConfirm: yup
-    .string()
-    .oneOf([yup.ref("password"), ""], "Passwords must match"),
+    .string().required("Confirm your password")
+    .oneOf([yup.ref("password"), ""], "Passwords must match")
 });
 
 const initialValuesLogin = {
@@ -84,6 +83,7 @@ export default function SignUpForm() {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <TextField
+                  color={"secondary"}
                   label="Full Name"
                   variant={"filled"}
                   onBlur={handleBlur}
@@ -98,6 +98,7 @@ export default function SignUpForm() {
                   margin={"normal"}
                 />
                 <TextField
+                  color={"secondary"}
                   label="Email Address"
                   variant={"filled"}
                   onBlur={handleBlur}
@@ -115,6 +116,7 @@ export default function SignUpForm() {
                 />
                 <TextField
                   label="Password"
+                  color={"secondary"}
                   type="password"
                   variant={"filled"}
                   onBlur={handleBlur}
@@ -130,6 +132,7 @@ export default function SignUpForm() {
                   margin={"normal"}
                 />
                 <TextField
+                color={"secondary"}
                   label="Confirm Password"
                   variant={"filled"}
                   type="password"
