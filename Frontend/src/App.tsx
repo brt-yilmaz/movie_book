@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp";
 import HomePage from "./pages/HomePage";
 import { useMemo } from "react";
 import { useAppSelector } from "./state/store";
+import AppLayout from "./ui/AppLayout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +31,9 @@ const App = () => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<AppLayout />}>
+              <Route index element={<HomePage />} />
+            </Route>
 
             <Route path={"/login"} element={<Login />} />
             <Route path={"/signup"} element={<SignUp />} />

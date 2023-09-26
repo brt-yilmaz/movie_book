@@ -55,7 +55,7 @@ export const themeSettings = (mode: "light" | "dark"): ThemeOptions => {
             },
             background: {
               default: colorTokens.grey[900],
-              paper: alpha(colorTokens.grey[800], 0.7),
+              paper: alpha(colorTokens.grey[800], 0.9),
             },
           }
         : {

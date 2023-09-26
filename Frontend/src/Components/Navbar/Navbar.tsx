@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: `${paper}` }}>
+    <AppBar position="fixed" sx={{ backgroundColor: `${paper}` }}>
       <Stack direction={"row"} justifyContent={"center"} height={"65px"}>
         {(!isMobile || !isSearchFocused) && (
           <NavToolBar>

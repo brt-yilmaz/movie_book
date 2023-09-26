@@ -1,11 +1,14 @@
-import Navbar from "../Components/Navbar/Navbar";
-import MovieSkeleton from "../ui/MovieSkeleton";
+import MoviesContainer from "../features/movies/MoviesContainer";
+import { styled } from "@mui/material/styles";
+
+const StyledHomePage = styled("div")({
+  padding: "3rem 2rem 1rem 1rem",
+});
 
 export default function HomePage() {
   return (
-    <>
-      <Navbar />
-      <MovieSkeleton />
-    </>
+    <StyledHomePage>
+      <MoviesContainer />
+    </StyledHomePage>
   );
 }
