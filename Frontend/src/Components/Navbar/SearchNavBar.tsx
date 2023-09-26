@@ -11,6 +11,7 @@ const Search = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "space-around",
   flexGrow: 1,
+  maxWidth: "600px",
   padding: theme.spacing(0.2, 1, 0.2, 1),
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
