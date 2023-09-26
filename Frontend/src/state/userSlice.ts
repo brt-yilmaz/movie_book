@@ -12,12 +12,14 @@ interface UserState {
   user: User | null;
   token: string | null;
   mode: "light" | "dark";
+  searchQuery: string;  
 }
 
 const initialState: UserState = {
   user: null,
   token: null,
   mode: "light",
+  searchQuery: ""
 } 
 
 export const userSlice = createSlice({
@@ -38,9 +40,14 @@ export const userSlice = createSlice({
 
     setMode: (state) => {
       state.mode = state.mode === "light" ? "dark" : "light";
+    },
+
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload
     }
+   
   }
 })
 
-export const { setLogin } = userSlice.actions;
+export const { setLogin, setLogout, setMode, setSearchQuery } = userSlice.actions;
 export default userSlice.reducer

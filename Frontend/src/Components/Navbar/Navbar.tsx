@@ -1,51 +1,80 @@
-// import FlexBetween from "../../ui/FlexBetween"
-// import { useState } from "react";
-// import {
-//   Box,
-//   IconButton,
-//   Typography,
-//   useTheme,
-//   useMediaQuery,
-//   InputBase,
-//   Select,
-//   MenuItem,
-//   FormControl,
-// } from "@mui/material";
+import { AppBar, Box, Menu, MenuItem, Stack } from "@mui/material";
+import { useState } from "react";
+// import { useAppSelector } from "../../state/store";
+import Logo from "./Logo";
+import NavToolBar from "./NavToolBar";
+import UserBox from "./UserIcons";
+import UserAvatar from "./UserAvatar";
+import { useTheme, useMediaQuery } from "@mui/material";
+import DarkModeIcon from "./DarkModeIcon";
+import SearchNavBar from "./SearchNavBar";
 
-// import {
-//   Search,
-//   Message,
-//   DarkMode,
-//   LightMode,
-//   Notifications,
-//   Help,
-//   Menu,
-//   Close,
-// } from "@mui/icons-material";
+const Navbar = () => {
+  const theme = useTheme();
+  const paper = theme.palette.background.paper;
+  // const userName = useAppSelector((state) => state.user?.name) || "Guest";
+  // const [open, setOpen] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-// import { useAppDispatch, useAppSelector } from "../../state/store";
-// import { useNavigate } from "react-router-dom";
-// import { setMode, setLogout } from "../../state";
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+  };
 
-// export default function Navbar() {
-//   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
-//   const dispatch = useAppDispatch();
-//   const navigate = useNavigate();
-//   const user = useSelector((state) => state.user);
-//   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const handleSearchBlur = () => {
+    setIsSearchFocused(false);
+  };
 
-//   const theme = useTheme();
-//   const neutralLight = theme.palette.neutral.light;
-//   const dark = theme.palette.neutral.dark;
-//   const background = theme.palette.background.default;
-//   const primaryLight = theme.palette.primary.light;
-//   const alt = theme.palette.background.paper;
-//   const fullName = user.name
+  return (
+    <AppBar position="sticky" sx={{ backgroundColor: `${paper}` }}>
+      <Stack direction={"row"} justifyContent={"center"} height={"65px"}>
+        {(!isMobile || !isSearchFocused) && (
+          <NavToolBar>
+            <>
+              <Logo />
+              <SearchNavBar
+                onFocus={handleSearchFocus}
+                onBlur={handleSearchBlur}
+                isSearchFocused={isSearchFocused}
+              />
+              <Stack direction={"row"} alignItems={"center"} gap={2}>
+                <UserBox />
+                <DarkModeIcon />
+                <UserAvatar />
+              </Stack>
+            </>
+          </NavToolBar>
+        )}
+        {isSearchFocused && isMobile && (
+          <SearchNavBar
+            onFocus={handleSearchFocus}
+            onBlur={handleSearchBlur}
+            isSearchFocused={isSearchFocused}
+          />
+        )}
+      </Stack>
 
+      {/* <Menu
+        id="positioned-menu"
+        aria-labelledby="positioned-button"
+        open={open}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{
+          vertical: 58,
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <MenuItem>{userName}</MenuItem>
+        <MenuItem>Profile</MenuItem>
+        <MenuItem>My account</MenuItem>
+        <MenuItem>Logout</MenuItem>
+      </Menu> */}
+    </AppBar>
+  );
+};
 
-//   return (
-//     <FlexBetween padding="1rem 6%" bgcolor={alt}>
-//       <div>Navbar</div>
-//     </FlexBetween>
-//   )
-// }
+export default Navbar;

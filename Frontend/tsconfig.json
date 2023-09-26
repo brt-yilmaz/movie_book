@@ -23,5 +23,5 @@
   "exclude": ["node_modules", "garbage"],
   "include": ["src", "garbage/SignupAndLogin.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "typeRoots": ["./node_modules/@types", "./@types"]
+  "typeRoots": ["./@types", "./node_modules/@types" ]
 }

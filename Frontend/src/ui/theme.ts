@@ -1,3 +1,4 @@
+import { ThemeOptions, alpha } from "@mui/material";
 // color design tokens export
 export const colorTokens = {
   grey: {
@@ -14,6 +15,7 @@ export const colorTokens = {
     800: "#1A1A1A",
     900: "#0A0A0A",
     1000: "#000000",
+    
   },
   primary: {
     50: "#E6FBFF",
@@ -31,7 +33,7 @@ export const colorTokens = {
 
 
 // mui theme settings
-export const themeSettings = (mode: "light" | "dark") => {
+export const themeSettings = (mode: "light" | "dark"): ThemeOptions => {
   return {
     palette: {
       mode: mode,
@@ -42,6 +44,7 @@ export const themeSettings = (mode: "light" | "dark") => {
               dark: colorTokens.primary[200],
               main: colorTokens.primary[500],
               light: colorTokens.primary[800],
+              
             },
             neutral: {
               dark: colorTokens.grey[100],
@@ -52,7 +55,7 @@ export const themeSettings = (mode: "light" | "dark") => {
             },
             background: {
               default: colorTokens.grey[900],
-              paper: colorTokens.grey[800],
+              paper: alpha(colorTokens.grey[800], 0.7),
             },
           }
         : {
@@ -74,34 +77,6 @@ export const themeSettings = (mode: "light" | "dark") => {
               paper: colorTokens.grey[0],
             },
           }),
-    },
-    typography: {
-      fontFamily: ["Rubik", "sans-serif"].join(","),
-      fontSize: 12,
-      h1: {
-        fontFamily: ["Rubik", "sans-serif"].join(","),
-        fontSize: 40,
-      },
-      h2: {
-        fontFamily: ["Rubik", "sans-serif"].join(","),
-        fontSize: 32,
-      },
-      h3: {
-        fontFamily: ["Rubik", "sans-serif"].join(","),
-        fontSize: 24,
-      },
-      h4: {
-        fontFamily: ["Rubik", "sans-serif"].join(","),
-        fontSize: 20,
-      },
-      h5: {
-        fontFamily: ["Rubik", "sans-serif"].join(","),
-        fontSize: 16,
-      },
-      h6: {
-        fontFamily: ["Rubik", "sans-serif"].join(","),
-        fontSize: 14,
-      },
-    },
+    }
   };
 };

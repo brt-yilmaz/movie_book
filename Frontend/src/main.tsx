@@ -10,7 +10,6 @@ import { PersistGate } from "redux-persist/es/integration/react";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from './ui/ErrorFallback.tsx';
 import { store } from './state/store.ts';
-import { CssBaseline } from '@mui/material';
 
 
 
@@ -20,7 +19,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistStore(store)}>
-          <CssBaseline enableColorScheme/>
           <App />
         </PersistGate>
       </Provider>
