@@ -1,10 +1,9 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 
+import { ObjectId } from "mongodb";
 
-import { ObjectId } from 'mongodb';
-
-declare module 'mongoose' {
-  import { Document } from 'mongoose';
+declare module "mongoose" {
+  import { Document } from "mongoose";
 
   interface UserDocument extends Document {
     _id: mongoose.Types.ObjectId;
@@ -12,18 +11,23 @@ declare module 'mongoose' {
     email?: string;
     password?: string | undefined;
     passwordConfirm?: string | undefined;
-    correctPassword?: ((candidatePassword: string | undefined, userPassword: string | undefined) => boolean) | undefined;
+    correctPassword?:
+      | ((
+          candidatePassword: string | undefined,
+          userPassword: string | undefined
+        ) => boolean)
+      | undefined;
     changedPasswordAfter?: (JWTTimestamp: number) => boolean | undefined;
     createPasswordResetToken?: () => string | undefined;
     passwordChangedAt: number | undefined;
-    role?: 'user'| 'co-admin' | 'admin';
+    role?: "user" | "co-admin" | "admin";
     passwordChangedAt?: Date | undefined;
     passwordResetToken?: String | undefined;
     passwordResetExpires?: Date | undefined;
     active: boolean | undefined;
     emailVerified: boolean | undefined;
     photo?: string | undefined;
-    
+    likedMovies?: string[] | undefined;
   }
 
   interface ReviewDocument extends Document {

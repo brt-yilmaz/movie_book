@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../state/store";
-import { apiMovies } from "./apiMovies";
+import { apiMovies } from "../../services/apiMovies";
 import { useQuery } from "@tanstack/react-query";
 
 export function useApiMovies() {

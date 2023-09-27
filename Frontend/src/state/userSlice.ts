@@ -2,35 +2,46 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
   id: string;
-  name: string
+  name: string;
   email: string;
-  role: 'user'| 'co-admin' | 'admin';
-  photo: string; 
+  role: "user" | "co-admin" | "admin";
+  photo: string;
+  likedMovies?: string[];
 }
 
 interface UserState {
   user: User | null;
   token: string | null;
   mode: "light" | "dark";
-  searchQuery: string;  
+  searchQuery: string;
 }
 
 const initialState: UserState = {
   user: null,
   token: null,
   mode: "light",
-  searchQuery: ""
-} 
+  searchQuery: "",
+};
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
-    setLogin: (state, action: PayloadAction<{ data: { user: User }, token: string }>) => {
-      const {id, name, email,photo,role} = action.payload.data.user;
-      const filteredObj = {id, name, email, photo, role};
-      state.user = filteredObj
+    setLogin: (
+      state,
+      action: PayloadAction<{ data: { user: User }; token: string }>
+    ) => {
+      const { id, name, email, photo, role, likedMovies } =
+        action.payload.data.user;
+      const filteredObj = { id, name, email, photo, role, likedMovies };
+      state.user = filteredObj;
       state.token = action.payload.token;
+    },
+
+    updateUser: (state, action: PayloadAction<string[]>) => {
+      if (state.user) {
+        state.user.likedMovies = action.payload;
+      }
     },
 
     setLogout: (state) => {
@@ -43,11 +54,11 @@ export const userSlice = createSlice({
     },
 
     setSearchQuery: (state, action: PayloadAction<string>) => {
-      state.searchQuery = action.payload
-    }
-   
-  }
-})
+      state.searchQuery = action.payload;
+    },
+  },
+});
 
-export const { setLogin, setLogout, setMode, setSearchQuery } = userSlice.actions;
-export default userSlice.reducer
+export const { setLogin, setLogout, setMode, setSearchQuery, updateUser } =
+  userSlice.actions;
+export default userSlice.reducer;
