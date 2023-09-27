@@ -1,26 +1,26 @@
 import { Box, CircularProgress } from "@mui/material";
 
-export default function MovieSpinner() {
+type MovieSpinnerProps = {
+  spinnerColor:
+    | "inherit"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | "warning";
+};
+
+export default function MovieSpinner({ spinnerColor }: MovieSpinnerProps) {
   return (
     <Box
-      sx={{
-        display: "flex",
-        overflow: "hidden",
-        justifyContent: "center",
-        alignItems: "center",
-        flexWrap: "wrap",
-        gap: 2,
-      }}
+      width={300}
+      height={300}
+      display={"flex"}
+      justifyContent={"center"}
+      alignItems={"center"}
     >
-      <Box
-        width={300}
-        height={300}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <CircularProgress />
-      </Box>
+      <CircularProgress color={spinnerColor} />
     </Box>
   );
 }

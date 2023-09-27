@@ -18,6 +18,8 @@ const Search = styled("div")(({ theme }) => ({
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
+  transition: "opacity 0.8s ease-in-out",
+  border: `1px solid ${alpha(theme.palette.common.black, 0.1)}`,
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -25,8 +27,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
     // vertical padding + font size from searchIcon
     transition: theme.transitions.create("width"),
-    backgroundColor: alpha(theme.palette.background.paper, 0.15),
     borderRadius: theme.shape.borderRadius,
+    paddingLeft: theme.spacing(1),
+    "&::placeholder": {
+      color: `${alpha(theme.palette.primary.dark, 1)}`,
+    },
   },
 }));
 
@@ -57,7 +62,7 @@ export default function SearchNavBar({
   };
 
   return (
-    <Search>
+    <Search className={isSearchFocused ? "animate-fadeIn" : ""}>
       <StyledInputBase
         placeholder="Search…"
         inputProps={{ "aria-label": "search" }}

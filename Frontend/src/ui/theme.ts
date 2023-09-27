@@ -2,8 +2,8 @@ import { ThemeOptions, alpha } from "@mui/material";
 // color design tokens export
 export const colorTokens = {
   grey: {
-    0: "#FFFFFF",
-    10: "#F6F6F6",
+    0: "#e2e8f0",
+    10: "#cbd5e1",
     50: "#F0F0F0",
     100: "#E0E0E0",
     200: "#C2C2C2",
@@ -12,8 +12,8 @@ export const colorTokens = {
     500: "#666666",
     600: "#4D4D4D",
     700: "#333333",
-    800: "#1A1A1A",
-    900: "#0A0A0A",
+    800: "#0f172a",
+    900: "#020617",
     1000: "#000000",
     
   },
@@ -55,7 +55,7 @@ export const themeSettings = (mode: "light" | "dark"): ThemeOptions => {
             },
             background: {
               default: colorTokens.grey[900],
-              paper: alpha(colorTokens.grey[800], 0.9),
+              paper: alpha(colorTokens.grey[800], 0.8),
             },
           }
         : {
@@ -74,7 +74,7 @@ export const themeSettings = (mode: "light" | "dark"): ThemeOptions => {
             },
             background: {
               default: colorTokens.grey[10],
-              paper: colorTokens.grey[0],
+              paper: alpha(colorTokens.grey[0], 0.8),
             },
           }),
     }
