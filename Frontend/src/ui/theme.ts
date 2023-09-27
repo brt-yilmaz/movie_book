@@ -29,6 +29,11 @@ export const colorTokens = {
     800: "#00353F",
     900: "#001519",
   },
+
+  background: {
+    moviesContainerDark: '#1f2937',
+    moviesContainerLight: '#9ca3af'
+  }
 };
 
 
@@ -52,6 +57,7 @@ export const themeSettings = (mode: "light" | "dark"): ThemeOptions => {
               mediumMain: colorTokens.grey[300],
               medium: colorTokens.grey[400],
               light: colorTokens.grey[700],
+              moviesContainer: colorTokens.background.moviesContainerDark,
             },
             background: {
               default: colorTokens.grey[900],
@@ -71,6 +77,7 @@ export const themeSettings = (mode: "light" | "dark"): ThemeOptions => {
               mediumMain: colorTokens.grey[400],
               medium: colorTokens.grey[300],
               light: colorTokens.grey[50],
+              moviesContainer: colorTokens.background.moviesContainerLight,
             },
             background: {
               default: colorTokens.grey[10],

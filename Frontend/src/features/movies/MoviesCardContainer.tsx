@@ -1,28 +1,23 @@
 import { Box } from "@mui/material";
-import MovieCard from "./MovieCard";
 import { useApiMovies } from "./useApiMovies";
-import MovieSkeleton from "../../ui/MovieSkeleton";
 import MoviesContainerSpinner from "../../ui/MoviesSpinnerContainer";
+import MovieCardContainer from "./MovieCardContainer";
+import { useTheme } from "@mui/material";
 
-type Movie = {
-  id: number;
-  Title: string;
-  Poster: string;
-  duration: number;
-  Year: string;
+type MovieData = {
   imdbID: string;
-  description: string;
 };
 
 export default function MoviesContainer() {
   const { isLoading, error, movies } = useApiMovies();
+  const theme = useTheme();
 
   if (isLoading) {
     return <MoviesContainerSpinner />;
   }
 
   if (error) {
-    return <div>Movie not found!</div>;
+    return <div>No movie found ! ! !</div>;
   }
 
   return (
@@ -30,17 +25,16 @@ export default function MoviesContainer() {
       sx={{
         display: "flex",
         flexWrap: "wrap",
-        gap: 2,
+        gap: 3,
         justifyContent: "center",
-        backgroundColor: "blue",
-        padding: 2,
+        backgroundColor: theme.palette.neutral.moviesContainer,
+        padding: 3,
         borderRadius: 1,
       }}
     >
       {" "}
-      {isLoading && <MovieSkeleton />}
-      {movies.map((movie: Movie) => (
-        <MovieCard key={movie.id} movieData={movie} />
+      {movies.map((movie: MovieData) => (
+        <MovieCardContainer key={movie.imdbID} imdbID={movie.imdbID} />
       ))}
     </Box>
   );

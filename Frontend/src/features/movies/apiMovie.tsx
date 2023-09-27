@@ -3,6 +3,5 @@ export async function apiMovie(imdbID: string) {
     "https://www.omdbapi.com/?i=" + `${imdbID}&apikey=71177485`
   );
   const data = await res.json();
-  console.log(data);
   return data;
 }

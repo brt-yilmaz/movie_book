@@ -9,7 +9,7 @@ const StyledAppLayout = styled("div")(({ theme }) => ({
 
 const Main = styled("main")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
-  padding: "4.8rem 2rem 3rem",
+  padding: "4rem 0.7rem 0.7rem 0.7rem",
 }));
 
 const Container = styled("div")({

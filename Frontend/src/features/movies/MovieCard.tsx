@@ -1,43 +1,132 @@
 import {
   Card,
+  CardActions,
   CardContent,
-  CardHeader,
   CardMedia,
+  Stack,
   Typography,
   Link,
-  IconButton,
-  Stack,
-  Rating,
-  CardActions,
+  Box,
 } from "@mui/material";
-import { useApiMovie } from "./useApiMovie.tsx";
-import { getGenreColor } from "../../helperFunctions/getGenreColor.ts";
-import StarIcon from "@mui/icons-material/Star";
-import MovieSkeleton from "../../ui/MovieSkeleton.tsx";
+import { useState } from "react";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { styled } from "@mui/material/styles";
+import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import ShareIcon from "@mui/icons-material/Share";
+import { getGenreColor } from "../../helperFunctions/getGenreColor";
+import Rating from "@mui/material/Rating";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Collapse from "@mui/material/Collapse";
 
 type MovieData = {
-  Title: string;
+  Actors: string;
+  Director: string;
+  Country: string;
+  Genre: string;
+  Language: string;
   Poster: string;
+  Title: string;
   Year: string;
-  imdbID: string;
+  imdbRating: string;
+  imdbVotes: string;
 };
 
-function MovieCard({ movieData }: { movieData: MovieData }) {
-  const { Title, Poster, Year, imdbID } = movieData;
-  const { isLoading, error, movieDetails } = useApiMovie(imdbID);
-
-  return (
-    // isLoading ? (
-    <MovieSkeleton />
-    // ) : (
-    //   <Card>
-    //     <CardHeader title={Title} />
-    //     <CardMedia component="img" image={Poster} alt={Title} />
-    //     <CardContent></CardContent>
-    //     <CardActions></CardActions>
-    //   </Card>
-    // );
-  );
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
 }
 
-export default MovieCard;
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+export default function MovieCard({ movieData }: { movieData: MovieData }) {
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  const {
+    imdbID,
+    Actors,
+    Director,
+    Country,
+    Genre,
+    Language,
+    Poster,
+    Title,
+    Year,
+    imdbRating,
+    imdbVotes,
+  } = movieData;
+
+  return (
+    <Card sx={{ maxWidth: 500, width: "100%" }}>
+      <CardMedia component="img" alt={Title} image={Poster} />
+      <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        {/* get text color according to movie's first genre*/}
+        <Typography
+          sx={{
+            color: getGenreColor(Genre),
+            objectFit: "cover",
+            fontSize: "1.1rem",
+          }}
+        >
+          {Title}
+        </Typography>
+        <Stack direction={"row"} alignItems={"center"} gap={1}>
+          <Link href={`https://www.imdb.com/title/${imdbID}`}>IMDB</Link>
+
+          <Rating
+            name="read-only"
+            value={Number(imdbRating)}
+            max={10}
+            readOnly
+            precision={0.1}
+          />
+        </Stack>
+        <Typography variant={"body1"}>
+          {" "}
+          <span style={{ color: "#81e6d9" }}>Year</span> : {Year}
+        </Typography>
+      </CardContent>
+      <CardActions disableSpacing>
+        <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton>
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
+        <ExpandMore
+          expand={expanded}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="show more"
+        >
+          <ExpandMoreIcon />
+        </ExpandMore>
+      </CardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <CardContent>
+          <Typography variant={"body1"}>
+            <span style={{ color: "#81e6d9" }}>Actors</span>: {Actors}
+          </Typography>
+          <Typography variant={"body1"}>
+            <span style={{ color: "#81e6d9" }}>Director</span>: {Director}
+          </Typography>
+          <Typography variant={"body1"}>
+            <span style={{ color: "#81e6d9" }}>Imdb Reviews</span>: {imdbVotes}{" "}
+            users
+          </Typography>
+        </CardContent>
+      </Collapse>
+    </Card>
+  );
+}
