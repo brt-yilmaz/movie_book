@@ -11,13 +11,14 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import UserAvatarBase from "../../ui/UserAvatarBase";
-import { IconButton, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../state/store";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { setLogout } from "../../state/userSlice";
 import LoginIcon from "@mui/icons-material/Login";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import UploadImageModal from "../movies/UploadImageModal";
 
 type Props = {
   open: boolean;
@@ -67,13 +68,9 @@ export default function SideBar({ open, setOpen }: Props) {
         />
       </Stack>
       <Divider />
-      <Box sx={{ padding: 2 }}>
-        <IconButton onClick={() => setIsUploadModalOpen(true)}>
-          <AddPhotoAlternateIcon />
-        </IconButton>
-      </Box>
-      j
+
       <Divider />
+
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
           <ListItem key={text} disablePadding>
@@ -118,13 +115,38 @@ export default function SideBar({ open, setOpen }: Props) {
             </ListItemButton>
           )}
         </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsUploadModalOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <AddPhotoAlternateIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Upload Image"} />
+          </ListItemButton>
+        </ListItem>
       </List>
+      {isUploadModalOpen && (
+        <UploadImageModal
+          open={isUploadModalOpen}
+          setOpen={setIsUploadModalOpen}
+        />
+      )}
     </Box>
   );
 
   return (
     <div>
-      <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={toggleDrawer(false)}
+        transitionDuration={{ enter: 600, exit: 300 }}
+      >
         {list}
       </Drawer>
     </div>

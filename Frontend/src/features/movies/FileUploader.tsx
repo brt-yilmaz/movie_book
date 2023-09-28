@@ -3,11 +3,13 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { apiFileUpload } from "../../services/apiFileUpload";
-import { useAppSelector } from "../../state/store";
+import { useAppDispatch, useAppSelector } from "../../state/store";
+import { updateUserProfilePhoto } from "../../state/userSlice";
 
 function FileUploader() {
   const navigate = useNavigate();
   const token = useAppSelector((state) => state.user.token);
+  const dispatch = useAppDispatch();
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -21,21 +23,23 @@ function FileUploader() {
 
       try {
         const response = await apiFileUpload(token, file);
-
+        console.log("response", response);
         if (response.error) {
           // Handle API error
           toast.error(response.error);
         } else {
           // File uploaded successfully
           toast.success("File uploaded successfully.");
-          navigate("/success"); // Redirect to a success page or perform other actions
+          navigate("/"); // Redirect to a success page or perform other actions
+          console.log(response);
+          dispatch(updateUserProfilePhoto(response.data.s3RL));
         }
       } catch (error) {
         // Handle network or other errors
         toast.error("An error occurred while uploading the file.");
       }
     },
-    [navigate, token]
+    [navigate, token, dispatch]
   );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { apiLikeMovie } from "../../services/apiLikeMovie";
 import { useAppDispatch } from "../../state/store";
-import { updateUser } from "../../state/userSlice";
+import { updateUserLikedMovies } from "../../state/userSlice";
 
 export default async function useLikeMovie(
   imdbID: string,
@@ -15,7 +15,7 @@ export default async function useLikeMovie(
 
   try {
     const res = await apiLikeMovie(imdbID, token);
-    dispatch(updateUser(res));
+    dispatch(updateUserLikedMovies(res));
   } catch (error) {
     setError(error as Error);
   } finally {

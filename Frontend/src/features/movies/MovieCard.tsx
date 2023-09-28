@@ -20,7 +20,7 @@ import Collapse from "@mui/material/Collapse";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAppDispatch, useAppSelector } from "../../state/store";
 import { apiLikeMovie } from "../../services/apiLikeMovie";
-import { updateUser } from "../../state/userSlice";
+import { updateUserLikedMovies } from "../../state/userSlice";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -85,7 +85,7 @@ export default function MovieCard({ movieData }: { movieData: MovieData }) {
     try {
       const res = await apiLikeMovie(imdbID, token);
       const likedMovies = res.data.user.likedMovies;
-      dispatch(updateUser(likedMovies));
+      dispatch(updateUserLikedMovies(likedMovies));
     } catch (error) {
       navigate("/login", { replace: true });
       toast.success("Please login to like a movie");

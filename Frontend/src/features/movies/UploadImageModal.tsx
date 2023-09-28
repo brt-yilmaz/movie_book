@@ -3,13 +3,14 @@ import { useDropzone } from "react-dropzone";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { apiFileUpload } from "../../services/apiFileUpload";
-import { useAppSelector } from "../../state/store";
+import { useAppDispatch, useAppSelector } from "../../state/store";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import { updateUserProfilePhoto } from "../../state/userSlice";
 
 type FileUploaderDialogProps = {
   open: boolean;
@@ -17,9 +18,10 @@ type FileUploaderDialogProps = {
 };
 
 function UploadImageModal({ open, setOpen }: FileUploaderDialogProps) {
+  console.log(open);
   const navigate = useNavigate();
   const token = useAppSelector((state) => state.user.token);
-
+  const dispatch = useAppDispatch();
   const handleOpen = () => {
     setOpen(true);
   };
@@ -44,14 +46,14 @@ function UploadImageModal({ open, setOpen }: FileUploaderDialogProps) {
           toast.error(response.error);
         } else {
           toast.success("File uploaded successfully.");
-          navigate("/");
+          dispatch(updateUserProfilePhoto(response.data.s3URL));
           handleClose();
         }
       } catch (error) {
         toast.error("An error occurred while uploading the file.");
       }
     },
-    [navigate, token]
+    [navigate, token, dispatch]
   );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });

@@ -38,12 +38,17 @@ export const userSlice = createSlice({
       state.token = action.payload.token;
     },
 
-    updateUser: (state, action: PayloadAction<string[]>) => {
+    updateUserLikedMovies: (state, action: PayloadAction<string[]>) => {
       if (state.user) {
         state.user.likedMovies = action.payload;
       }
     },
 
+    updateUserProfilePhoto: (state, action: PayloadAction<string>) => {
+      if (state.user) {
+        state.user.photo = action.payload;
+      }
+    },
     setLogout: (state) => {
       state.user = null;
       state.token = null;
@@ -59,6 +64,12 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setLogin, setLogout, setMode, setSearchQuery, updateUser } =
-  userSlice.actions;
+export const {
+  setLogin,
+  setLogout,
+  setMode,
+  setSearchQuery,
+  updateUserLikedMovies,
+  updateUserProfilePhoto,
+} = userSlice.actions;
 export default userSlice.reducer;
