@@ -1,5 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit"; 
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./userSlice";
+import { messagesSlice } from "./messagesSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import {
   FLUSH,
@@ -12,25 +13,30 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
+const rootReducer = combineReducers({
+  user: userSlice.reducer,
+  messages: messagesSlice.reducer,
+});
+
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-  getDefaultMiddleware({
-    serializableCheck: {
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  }),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
 
-})
-
-
-export const useAppDispatch:() => typeof store.dispatch = useDispatch;
-export const useAppSelector:TypedUseSelectorHook<ReturnType<typeof store.getState>> = useSelector
+export const useAppDispatch: () => typeof store.dispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<
+  ReturnType<typeof store.getState>
+> = useSelector;

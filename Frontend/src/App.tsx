@@ -21,7 +21,7 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  const mode = useAppSelector((state) => state.mode);
+  const mode = useAppSelector((state) => state.user.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   return (

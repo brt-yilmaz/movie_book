@@ -1,13 +1,17 @@
-import { Avatar } from "@mui/material";
-import { useAppSelector } from "../../state/store";
+import SideBar from "../../features/sideBar/SideBar";
+import { useState } from "react";
+import UserAvatarBase from "../../ui/UserAvatarBase";
+import { Box } from "@mui/material";
 
 export default function UserAvatar() {
-  const userPhotoURL = useAppSelector((state) => state.user?.photo) || "";
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
   return (
-    <Avatar
-      sx={{ width: 35, height: 35, margin: "0 !important" }}
-      src={userPhotoURL}
-    />
+    <>
+      <Box onClick={() => setIsSideBarOpen(true)}>
+        <UserAvatarBase />
+      </Box>
+      <SideBar open={isSideBarOpen} setOpen={setIsSideBarOpen} />
+    </>
   );
 }

@@ -3,7 +3,8 @@ import { apiMovies } from "../../services/apiMovies";
 import { useQuery } from "@tanstack/react-query";
 
 export function useApiMovies() {
-  const query = useAppSelector((state) => state.searchQuery);
+  const query = useAppSelector((state) => state.user.searchQuery);
+
   const {
     isLoading,
     data: movies,

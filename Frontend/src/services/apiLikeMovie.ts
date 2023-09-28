@@ -9,10 +9,8 @@ export async function apiLikeMovie(imdbID: string, token: string | null) {
       },
     });
     const data = await res.json();
-    console.log(data);
     return data;
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

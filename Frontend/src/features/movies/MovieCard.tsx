@@ -18,12 +18,12 @@ import Rating from "@mui/material/Rating";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import useLikeMovie from "./useLikeMovie";
 import { useAppDispatch, useAppSelector } from "../../state/store";
 import { apiLikeMovie } from "../../services/apiLikeMovie";
 import { updateUser } from "../../state/userSlice";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 type MovieData = {
   Actors: string;
@@ -57,9 +57,9 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 export default function MovieCard({ movieData }: { movieData: MovieData }) {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery("(max-width:480px)");
-  const token = useAppSelector((state) => state.token);
-  const user = useAppSelector((state) => state.user);
-  console.log(user);
+  const navigate = useNavigate();
+  const token = useAppSelector((state) => state.user.token);
+  const user = useAppSelector((state) => state.user.user);
   const {
     imdbID,
     Actors,
@@ -82,9 +82,14 @@ export default function MovieCard({ movieData }: { movieData: MovieData }) {
   };
 
   const handleLikeClick = async () => {
-    const res = await apiLikeMovie(imdbID, token);
-    const likedMovies = res.data.user.likedMovies;
-    dispatch(updateUser(likedMovies));
+    try {
+      const res = await apiLikeMovie(imdbID, token);
+      const likedMovies = res.data.user.likedMovies;
+      dispatch(updateUser(likedMovies));
+    } catch (error) {
+      navigate("/login", { replace: true });
+      toast.success("Please login to like a movie");
+    }
   };
 
   return (

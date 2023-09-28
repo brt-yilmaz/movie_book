@@ -57,7 +57,7 @@ export default function SearchNavBar({
     if (value.length >= 3) {
       timerRef.current = setTimeout(() => {
         dispatch(setSearchQuery(value));
-      }, 400);
+      }, 800);
     }
   };
 
