@@ -7,6 +7,9 @@ import AppError from "../utils/appError";
 import { Request, Response, NextFunction } from "express";
 import { UserDocument, HydratedDocument } from "mongoose";
 import Email from "../utils/email";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const signToken = (id: ObjectId): string => {
   const signOptions: SignOptions = {
@@ -83,7 +86,7 @@ export const verifyEmail = catchAsync(async (req, res, next) => {
   currentUser.emailVerified = true;
   await currentUser.save({ validateBeforeSave: false });
 
-  const frontendLoginURL = "http://localhost:5173/login";
+  const frontendLoginURL = process.env.FRONTEND_LOGIN_URL || "";
 
   return res.redirect(frontendLoginURL);
 });
