@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import StyledToaster from "./ui/Toaster";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import { themeSettings } from "./ui/theme";
@@ -26,7 +25,6 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
@@ -40,7 +38,7 @@ const App = () => {
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
+
       <StyledToaster />
     </QueryClientProvider>
   );

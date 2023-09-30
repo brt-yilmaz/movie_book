@@ -8,6 +8,9 @@ services:
       - "3000:3000"
     networks:
       - movie-book
+    volumes:
+      - ./client/:/usr/src/app
+      - /usr/src/app/node_modules
   api-server:
     image: api-server
     build: ./server/
@@ -15,6 +18,9 @@ services:
       - "3001:3001"
     networks: 
       - movie-book
+    volumes:
+      - ./server/:/usr/src/app
+      - /usr/src/app/node_modules
 
 networks: 
   movie-book:
