@@ -1,0 +1,22 @@
+version: '3'
+services:
+  react-app:
+    image: react-app-prod:${ENV}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - movie-book
+   
+  api-server:
+    image: api-server
+    restart: unless-stopped
+    env_file: ./server/config/${ENV}.env 
+    ports:
+      - "3001:3001"
+    networks: 
+      - movie-book
+networks: 
+  movie-book:
+    driver: bridge
