@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename={"/"}>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
           <Routes>

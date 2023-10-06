@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start" : "npm run dev"
+    "start": "npm run dev"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -33,6 +33,7 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@types/node": "^20.8.2",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

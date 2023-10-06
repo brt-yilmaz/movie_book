@@ -85,7 +85,6 @@ export default function LoginForm() {
                   error={Boolean(touched.email) && Boolean(errors.email)}
                   helperText={touched.email && errors.email}
                   fullWidth
-                  autoFocus
                   autoComplete="email"
                   required
                   margin={"normal"}

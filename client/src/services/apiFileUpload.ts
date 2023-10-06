@@ -7,7 +7,7 @@ export async function apiFileUpload(token: string | null, file: File) {
     return { error: "No file selected." };
   }
 
-  const url = `http://localhost:3001/api/v1/users/uploadProfilePhoto/`;
+  const url = `http://18.192.127.148/api/v1/users/uploadProfilePhoto/`;
   try {
     const formData = new FormData();
     formData.append("photo", file);

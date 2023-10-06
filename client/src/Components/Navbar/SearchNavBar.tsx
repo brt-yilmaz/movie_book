@@ -47,7 +47,7 @@ export default function SearchNavBar({
   isSearchFocused,
 }: Props) {
   const dispatch = useAppDispatch();
-  const timerRef = useRef<number | undefined>(undefined);
+  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const inputRef = useRef(null);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

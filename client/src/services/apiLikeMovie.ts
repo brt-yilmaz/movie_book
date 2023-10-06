@@ -1,5 +1,5 @@
 export async function apiLikeMovie(imdbID: string, token: string | null) {
-  const url = "http://localhost:3001/api/v1/users/likeMovie/" + imdbID;
+  const url = `http://18.192.127.148/api/v1/users/likeMovie/${imdbID}`;
   try {
     const res = await fetch(url, {
       method: "PATCH",
