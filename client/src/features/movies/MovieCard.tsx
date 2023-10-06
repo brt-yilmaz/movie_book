@@ -43,12 +43,16 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-const MovieCard = ({ movieData }: { movieData: MovieData }) => {
+function MovieCard({ movieData }: { movieData: MovieData }) {
+  console.log("moviecard render oluyor");
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery("(max-width:480px)");
   const navigate = useNavigate();
   const token = useAppSelector((state) => state.user.token);
   const user = useAppSelector((state) => state.user.user);
+  const [isLiked, setIsLiked] = useState(
+    user?.likedMovies?.includes(movieData.imdb_id)
+  );
   const {
     imdb_id,
     vote_average,
@@ -63,7 +67,6 @@ const MovieCard = ({ movieData }: { movieData: MovieData }) => {
     ?.slice(0, 3)
     .map((c) => c.name)
     .join(", ");
-  console.log(movieData);
   const directors = credits?.crew
     .filter((c) => c.department === "Directing")
     .slice(0, 3)
@@ -96,7 +99,6 @@ const MovieCard = ({ movieData }: { movieData: MovieData }) => {
         width: "100%",
         display: "flex",
         flexWrap: "wrap",
-        gap: 3,
         justifyContent: "space-around",
         padding: 0,
       }}
@@ -105,7 +107,7 @@ const MovieCard = ({ movieData }: { movieData: MovieData }) => {
         component="img"
         alt={title}
         image={baseMoviePosterUrl + backdrop_path}
-        sx={{ flexBasis: "100px", borderRadius: 1 }}
+        sx={{ flexBasis: "200px", borderRadius: 1, maxWidth: "400px" }}
       />
       <Box sx={{ display: "flex", flexDirection: "column", paddingX: 1.5 }}>
         <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
@@ -180,6 +182,6 @@ const MovieCard = ({ movieData }: { movieData: MovieData }) => {
       </Box>
     </Card>
   );
-};
+}
 
-export default MovieCard;
+export const MemoizedMovieCard = React.memo(MovieCard);
