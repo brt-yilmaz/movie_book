@@ -1,14 +1,14 @@
 import { apiMovie } from "../../services/apiMovie";
 import { useQuery } from "@tanstack/react-query";
 
-export function useApiMovie(imdbID: string) {
+export function useApiMovie(id: string) {
   const {
     isLoading,
     data: movieDetails,
     error,
   } = useQuery({
-    queryKey: [imdbID],
-    queryFn: () => apiMovie(imdbID),
+    queryKey: [id],
+    queryFn: () => apiMovie(id),
   });
   return { isLoading, error, movieDetails };
 }

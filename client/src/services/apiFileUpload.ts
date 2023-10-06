@@ -11,7 +11,6 @@ export async function apiFileUpload(token: string | null, file: File) {
   try {
     const formData = new FormData();
     formData.append("photo", file);
-    console.log(formData);
     const res = await fetch(url, {
       method: "PATCH",
       headers: {

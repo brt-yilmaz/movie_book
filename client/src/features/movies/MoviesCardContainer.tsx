@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../state/store";
 import { setSearchQuery } from "../../state/userSlice";
 
 type MovieData = {
-  imdbID: string;
+  id: string;
 };
 
 export default function MoviesContainer() {
@@ -59,7 +59,7 @@ export default function MoviesContainer() {
       >
         {" "}
         {movies.map((movie: MovieData) => (
-          <MovieCardContainer key={movie.imdbID} imdbID={movie.imdbID} />
+          <MovieCardContainer key={movie.id} id={movie.id} />
         ))}
       </Box>
     </Box>

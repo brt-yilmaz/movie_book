@@ -28,10 +28,14 @@ const SignUpSchema = yup.object().shape({
     .string()
     .email("Enter a valid email")
     .required("Enter a valid email"),
-  password: yup.string().min(8 , "Password must be at least 8 characters long").required("Enter your password"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .required("Enter your password"),
   passwordConfirm: yup
-    .string().required("Confirm your password")
-    .oneOf([yup.ref("password"), ""], "Passwords must match")
+    .string()
+    .required("Confirm your password")
+    .oneOf([yup.ref("password"), ""], "Passwords must match"),
 });
 
 const initialValuesLogin = {
@@ -109,7 +113,7 @@ export default function SignUpForm() {
                     Boolean(touched.email) &&
                     (Boolean(errors.email) || Boolean(emailError))
                   }
-                  helperText={touched.email && errors.email}
+                  helperText={(touched.email && errors.email) || emailError}
                   fullWidth
                   required
                   margin="normal"
@@ -124,15 +128,13 @@ export default function SignUpForm() {
                   value={values.password}
                   name="password"
                   error={Boolean(touched.password) && Boolean(errors.password)}
-                  helperText={
-                    (touched.password && errors.password) || emailError
-                  }
+                  helperText={touched.password && errors.password}
                   fullWidth
                   required
                   margin={"normal"}
                 />
                 <TextField
-                color={"secondary"}
+                  color={"secondary"}
                   label="Confirm Password"
                   variant={"filled"}
                   type="password"

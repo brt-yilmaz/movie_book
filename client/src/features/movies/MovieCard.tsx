@@ -24,20 +24,9 @@ import { updateUserLikedMovies } from "../../state/userSlice";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import React from "react";
 
-type MovieData = {
-  Actors: string;
-  Director: string;
-  Country: string;
-  Genre: string;
-  Language: string;
-  Poster: string;
-  Title: string;
-  Year: string;
-  imdbRating: string;
-  imdbVotes: string;
-  imdbID: string;
-};
+const baseMoviePosterUrl = "https://image.tmdb.org/t/p/w500";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -54,24 +43,34 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function MovieCard({ movieData }: { movieData: MovieData }) {
+const MovieCard = ({ movieData }: { movieData: MovieData }) => {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery("(max-width:480px)");
   const navigate = useNavigate();
   const token = useAppSelector((state) => state.user.token);
   const user = useAppSelector((state) => state.user.user);
   const {
-    imdbID,
-    Actors,
-    Director,
-    Genre,
-    Poster,
-    Title,
-    Year,
-    imdbRating,
-    imdbVotes,
+    imdb_id,
+    vote_average,
+    credits,
+    genres,
+    backdrop_path,
+    title,
+    release_date,
   } = movieData;
-  const isUserLiked = user?.likedMovies?.includes(imdbID);
+
+  const Actors = credits?.cast
+    ?.slice(0, 3)
+    .map((c) => c.name)
+    .join(", ");
+  console.log(movieData);
+  const directors = credits?.crew
+    .filter((c) => c.department === "Directing")
+    .slice(0, 3)
+    .map((c) => c.name)
+    .join(", ");
+
+  const isUserLiked = user?.likedMovies?.includes(imdb_id);
 
   const [expanded, setExpanded] = useState(false);
 
@@ -81,7 +80,7 @@ export default function MovieCard({ movieData }: { movieData: MovieData }) {
 
   const handleLikeClick = async () => {
     try {
-      const res = await apiLikeMovie(imdbID, token);
+      const res = await apiLikeMovie(imdb_id, token);
       const likedMovies = res.data.user.likedMovies;
       dispatch(updateUserLikedMovies(likedMovies));
     } catch (error) {
@@ -99,38 +98,38 @@ export default function MovieCard({ movieData }: { movieData: MovieData }) {
         flexWrap: "wrap",
         gap: 3,
         justifyContent: "space-around",
-        padding: 3,
+        padding: 0,
       }}
     >
       <CardMedia
         component="img"
-        alt={Title}
-        image={Poster}
-        sx={{ flexBasis: "100px", borderRadius: 3 }}
+        alt={title}
+        image={baseMoviePosterUrl + backdrop_path}
+        sx={{ flexBasis: "100px", borderRadius: 1 }}
       />
       <Box sx={{ display: "flex", flexDirection: "column", paddingX: 1.5 }}>
         <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
           {/* get text color according to movie's first genre*/}
           <Typography
             sx={{
-              color: getGenreColor(Genre),
+              color: getGenreColor(genres),
               objectFit: "cover",
               fontSize: "1.1rem",
               maxWidth: "25ch",
             }}
           >
-            {Title}
+            {title}
           </Typography>
           <Stack
             direction={isMobile ? "column" : "row"}
             alignItems={"flex-start"}
             gap={1}
           >
-            <Link href={`https://www.imdb.com/title/${imdbID}`}>IMDB</Link>
+            <Link href={`https://www.imdb.com/title/${imdb_id}`}>IMDB</Link>
 
             <Rating
               name="read-only"
-              value={Number(imdbRating)}
+              value={vote_average}
               max={10}
               readOnly
               precision={0.1}
@@ -138,7 +137,7 @@ export default function MovieCard({ movieData }: { movieData: MovieData }) {
           </Stack>
           <Typography variant={"body1"}>
             {" "}
-            <span style={{ color: "#81e6d9" }}>Year</span> : {Year}
+            <span style={{ color: "#81e6d9" }}>Date</span> : {release_date}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
@@ -174,15 +173,13 @@ export default function MovieCard({ movieData }: { movieData: MovieData }) {
               <span style={{ color: "#81e6d9" }}>Actors</span>: {Actors}
             </Typography>
             <Typography variant={"body1"}>
-              <span style={{ color: "#81e6d9" }}>Director</span>: {Director}
-            </Typography>
-            <Typography variant={"body1"}>
-              <span style={{ color: "#81e6d9" }}>Imdb Reviews</span>:{" "}
-              {imdbVotes} users
+              <span style={{ color: "#81e6d9" }}>Director</span>: {directors}
             </Typography>
           </CardContent>
         </Collapse>
       </Box>
     </Card>
   );
-}
+};
+
+export default MovieCard;

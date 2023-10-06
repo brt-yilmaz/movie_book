@@ -19,7 +19,7 @@ interface UserState {
 const initialState: UserState = {
   user: null,
   token: null,
-  mode: "light",
+  mode: "dark",
   searchQuery: "",
 };
 
