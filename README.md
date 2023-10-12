@@ -7,7 +7,7 @@ Please note that this project is still in development, and the design is not yet
 
 - **User Registration and Login**: Users can click on the avatar icon and register by clicking the "Sign Up" button. If they don't confirm their email, they will receive an error when logging in.
 
-- **Email Confirmation**: Users who confirm their email via the confirmation link will be able to log in successfully. We are aware of an issue where an error may be displayed after clicking the confirmation link; however, the verification process will still occur.
+- **Email Confirmation**: Users who confirm their email via the confirmation link will be able to log in successfully. I am aware of an issue where an error may be displayed after clicking the confirmation link; however, the verification process will still occur.
 
 - **User Authentication**: Registered users can log in using their credentials.
 
