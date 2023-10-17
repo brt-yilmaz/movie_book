@@ -5,7 +5,7 @@ export async function signup(
   passwordConfirm: string
 ) {
   const signUpResponse = await fetch(
-    `http://18.192.127.148/api/v1/users/signup`,
+    `${import.meta.env.VITE_BASE_URL}/api/v1/users/signup`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,7 +48,7 @@ export async function login({ email, password }: Login) {
   console.log(import.meta.env);
 
   const loginResponse = await fetch(
-    "http://18.192.127.148/api/v1/users/login",
+    "${import.meta.env.VITE_BASE_URL}/api/v1/users/login",
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

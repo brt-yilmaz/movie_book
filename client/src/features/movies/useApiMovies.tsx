@@ -12,7 +12,6 @@ export function useApiMovies() {
   } = useQuery({
     queryKey: [query],
     queryFn: () => apiMovies(query),
-    enabled: !!query,
   });
   return { isLoading, error, movies };
 }
