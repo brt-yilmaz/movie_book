@@ -45,6 +45,12 @@ const userSchema = new mongoose.Schema(
         default: [],
       },
     ],
+    location: {
+      type: String,
+    },
+    occupation: {
+      type: String,
+    },
     role: {
       type: String,
       enum: ["user", "co-admin", "admin"],

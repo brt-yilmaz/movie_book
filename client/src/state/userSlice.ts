@@ -32,9 +32,17 @@ export const userSlice = createSlice({
       state,
       action: PayloadAction<{ data: { user: User }; token: string }>
     ) => {
-      const { id, name, email, photo, role, likedMovies } =
+      const { id, name, email, photo, role, likedMovies, friends } =
         action.payload.data.user;
-      const filteredObj = { id, name, email, photo, role, likedMovies };
+      const filteredObj = {
+        id,
+        name,
+        email,
+        photo,
+        role,
+        likedMovies,
+        friends,
+      };
       state.user = filteredObj;
       state.token = action.payload.token;
     },

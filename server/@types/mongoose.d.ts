@@ -28,6 +28,9 @@ declare module "mongoose" {
     emailVerified: boolean | undefined;
     photo?: string | undefined;
     likedMovies?: string[] | undefined;
+    friends?: mongoose.Types.ObjectId[] | undefined;
+    location?: string | undefined;
+    occupation?: string | undefined;
   }
 
   interface ReviewDocument extends Document {

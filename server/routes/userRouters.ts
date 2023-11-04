@@ -10,7 +10,12 @@ import {
   verifyEmail,
   restrictTo,
 } from "../controllers/authController";
-import { getMe, getUser, likeMovie } from "../controllers/userController";
+import {
+  getFriends,
+  getMe,
+  getUser,
+  likeMovie,
+} from "../controllers/userController";
 import { uploadProfilePhotoAndResize } from "../controllers/userController";
 
 const router = express.Router();
@@ -25,6 +30,7 @@ router.get("/verifyEmail/:token", verifyEmail);
 
 router.get("/me", getMe, getUser);
 router.get("/:id", getUser);
+router.get("/:id/friends", getFriends);
 
 // Protect all routes after this middleware
 router.use(protect);

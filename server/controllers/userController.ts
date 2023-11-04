@@ -204,3 +204,29 @@ export const likeMovie = catchAsync(
     });
   }
 );
+
+export const getFriends = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return next(new AppError("No user found with that ID", 404));
+    }
+
+    if (!user.friends) {
+      return next(new AppError("No friends found with that ID", 404));
+    }
+
+    const friends = (await Promise.all(
+      user.friends.map((id) => User.findById(id))
+    )) as UserDocument[];
+
+    const formattedFriends = friends.map(
+      ({ _id, name, occupation, location, photo }) => {
+        return { _id, name, occupation, location, photo };
+      }
+    );
+    res.status(200).json(formattedFriends);
+  }
+);
