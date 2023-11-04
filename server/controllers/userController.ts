@@ -122,6 +122,7 @@ export const getMe = (
   next: NextFunction
 ): void => {
   req.params.id = req.user?.id;
+  console.log("req.user", req.user);
   next();
 };
 

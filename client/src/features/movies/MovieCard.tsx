@@ -50,9 +50,7 @@ function MovieCard({ movieData }: { movieData: MovieData }) {
   const navigate = useNavigate();
   const token = useAppSelector((state) => state.user.token);
   const user = useAppSelector((state) => state.user.user);
-  const [isLiked, setIsLiked] = useState(
-    user?.likedMovies?.includes(movieData.imdb_id)
-  );
+
   const {
     imdb_id,
     vote_average,

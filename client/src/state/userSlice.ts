@@ -7,6 +7,7 @@ interface User {
   role: "user" | "co-admin" | "admin";
   photo: string;
   likedMovies?: string[];
+  friends?: string[] | undefined;
 }
 
 interface UserState {
@@ -61,6 +62,14 @@ export const userSlice = createSlice({
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
+
+    setFriends: (state, action: PayloadAction<User>) => {
+      if (state.user) {
+        state.user.friends = action.payload.friends;
+      } else {
+        console.error("user friends non-existent :(");
+      }
+    },
   },
 });
 
@@ -71,5 +80,6 @@ export const {
   setSearchQuery,
   updateUserLikedMovies,
   updateUserProfilePhoto,
+  setFriends,
 } = userSlice.actions;
 export default userSlice.reducer;

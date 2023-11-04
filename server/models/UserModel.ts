@@ -38,6 +38,13 @@ const userSchema = new mongoose.Schema(
         message: "Passwords are not the same!",
       },
     },
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
     role: {
       type: String,
       enum: ["user", "co-admin", "admin"],
