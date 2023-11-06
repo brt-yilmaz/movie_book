@@ -65,7 +65,7 @@ img {
 
 .animate-fadeIn {
   animation-name: fadeIn;
-  animation-duration: 1s;
+  animation-duration: 0.4s;
   animation-timing-function: ease-in; /* ease-in efektini kullanın */
 }
 

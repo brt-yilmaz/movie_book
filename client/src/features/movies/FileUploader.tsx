@@ -23,7 +23,6 @@ function FileUploader() {
 
       try {
         const response = await apiFileUpload(token, file);
-        console.log("response", response);
         if (response.error) {
           // Handle API error
           toast.error(response.error);
@@ -31,7 +30,6 @@ function FileUploader() {
           // File uploaded successfully
           toast.success("File uploaded successfully.");
           navigate("/"); // Redirect to a success page or perform other actions
-          console.log(response);
           dispatch(updateUserProfilePhoto(response.data.s3RL));
         }
       } catch (error) {

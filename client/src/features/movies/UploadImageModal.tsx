@@ -18,7 +18,6 @@ type FileUploaderDialogProps = {
 };
 
 function UploadImageModal({ open, setOpen }: FileUploaderDialogProps) {
-  console.log(open);
   const navigate = useNavigate();
   const token = useAppSelector((state) => state.user.token);
   const dispatch = useAppDispatch();

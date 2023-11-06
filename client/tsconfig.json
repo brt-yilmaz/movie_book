@@ -21,7 +21,7 @@
     "noFallthroughCasesInSwitch": true
   },
   "exclude": ["node_modules", "garbage"],
-  "include": ["src", "garbage/SignupAndLogin.tsx"],
+  "include": ["src", "garbage/SignupAndLogin.tsx", "types.ts"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "typeRoots": ["./@types", "./node_modules/@types" ]
+  "typeRoots": ["./node_modules/@types" ]
 }

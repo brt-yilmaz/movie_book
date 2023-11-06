@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import StyledToaster from "./ui/Toaster";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
 import { themeSettings } from "./ui/theme";
@@ -10,22 +9,13 @@ import { useMemo } from "react";
 import { useAppSelector } from "./state/store";
 import AppLayout from "./ui/AppLayout";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-    },
-  },
-});
-
 const App = () => {
   const mode = useAppSelector((state) => state.user.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+    <>
+      <BrowserRouter basename={"/"}>
         <ThemeProvider theme={theme}>
           <CssBaseline enableColorScheme />
           <Routes>
@@ -40,7 +30,7 @@ const App = () => {
       </BrowserRouter>
 
       <StyledToaster />
-    </QueryClientProvider>
+    </>
   );
 };
 

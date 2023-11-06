@@ -1,11 +1,15 @@
+import { useGetMovieDetailsQuery } from "../../services/movieDetailsApi.tsx";
 import MovieSkeleton from "../../ui/MovieSkeleton.tsx";
-import MovieCard from "./MovieCard.tsx";
-import { useApiMovie } from "./useApiMovie.tsx";
+import { MemoizedMovieCard } from "./MovieCard.tsx";
 
-function MovieCardContainer({ imdbID }: { imdbID: string }) {
-  const { isLoading, movieDetails } = useApiMovie(imdbID);
+function MovieCardContainer({ id }: { id: string }) {
+  const { isLoading, data: movieDetails } = useGetMovieDetailsQuery(id);
 
-  return isLoading ? <MovieSkeleton /> : <MovieCard movieData={movieDetails} />;
+  return isLoading ? (
+    <MovieSkeleton />
+  ) : (
+    <MemoizedMovieCard movieData={movieDetails} />
+  );
 }
 
 export default MovieCardContainer;

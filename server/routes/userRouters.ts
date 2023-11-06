@@ -10,7 +10,13 @@ import {
   verifyEmail,
   restrictTo,
 } from "../controllers/authController";
-import { likeMovie } from "../controllers/userController";
+import {
+  addRemoveFriend,
+  getFriends,
+  getMe,
+  getUser,
+  likeMovie,
+} from "../controllers/userController";
 import { uploadProfilePhotoAndResize } from "../controllers/userController";
 
 const router = express.Router();
@@ -22,6 +28,11 @@ router.get("/logout", logout);
 router.post("/forgotPassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
 router.get("/verifyEmail/:token", verifyEmail);
+
+router.get("/me", getMe, getUser);
+router.get("/:id", getUser);
+router.get("/:id/friends", getFriends);
+router.patch("/:id/:friendId", addRemoveFriend);
 
 // Protect all routes after this middleware
 router.use(protect);
