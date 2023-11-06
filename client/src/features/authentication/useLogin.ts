@@ -19,7 +19,6 @@ export function useLogin() {
     setIsLoading(true);
     try {
       const response = await loginApi({ email, password });
-      console.log(response);
       dispatch(setLogin(response));
       navigate("/", { replace: true });
     } catch (error) {

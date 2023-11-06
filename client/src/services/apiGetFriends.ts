@@ -9,6 +9,5 @@ export const apiGetFriends = async (userId: string | undefined) => {
   };
   const res = await fetch(url, options);
   const data = await res.json();
-  console.log(data);
   return data;
 };

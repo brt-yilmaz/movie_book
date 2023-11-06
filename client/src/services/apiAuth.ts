@@ -45,8 +45,6 @@ type Login = {
 };
 
 export async function login({ email, password }: Login) {
-  console.log(import.meta.env);
-
   const loginResponse = await fetch(
     `${import.meta.env.VITE_BASE_URL}/api/v1/users/login`,
     {

@@ -6,9 +6,7 @@ import { useGetUserQuery } from "../../services/userApi";
 
 const FriendListWidget = ({ userId }: { userId: string }) => {
   const { palette } = useTheme();
-  console.log(userId);
   const { isLoading, data: user, isSuccess } = useGetUserQuery(userId);
-  console.log(user);
 
   return (
     <>

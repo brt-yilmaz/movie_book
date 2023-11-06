@@ -124,7 +124,6 @@ export const getMe = (
   next: NextFunction
 ): void => {
   req.params.id = req.user?.id;
-  console.log("req.user", req.user);
   next();
 };
 
@@ -247,7 +246,6 @@ export const addRemoveFriend = catchAsync(
     if (!friend) {
       return next(new AppError("No friend found with that ID", 404));
     }
-    console.log(user.friends);
     const isFriend = user.friends?.includes(friendId as any);
 
     if (user.friends?.length === 0 || !isFriend) {

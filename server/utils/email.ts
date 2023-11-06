@@ -1,9 +1,9 @@
 //import { SESClient, SendEmailCommand, SendEmailCommandInput, SESClientConfig} from '@aws-sdk/client-ses'
-import nodeMailer from 'nodemailer'
-import pug from 'pug'
-import { UserDocument } from 'mongoose'
-import dotenv from 'dotenv'                   
-dotenv.config()
+import nodeMailer from "nodemailer";
+import pug from "pug";
+import { UserDocument } from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 class Email {
   to: string | undefined;
@@ -11,34 +11,36 @@ class Email {
   url: string | undefined;
   from: string | undefined;
 
-  constructor( user: UserDocument, url: string) {
+  constructor(user: UserDocument, url: string) {
     this.to = user.email;
-    this.firstName = user.name?.split(' ')[0];
+    this.firstName = user.name?.split(" ")[0];
     this.url = url;
     this.from = `MovieBook <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
-    console.log(process.env.APP_PASSWORD)
     return nodeMailer.createTransport({
-      service: 'gmail',
-      host: 'smtp.gmail.com',
+      service: "gmail",
+      host: "smtp.gmail.com",
       port: 587,
       secure: false,
       auth: {
         user: process.env.EMAIL_FROM,
-        pass: process.env.APP_PASSWORD
-      }
+        pass: process.env.APP_PASSWORD,
+      },
     });
   }
 
-  async send(template:string, subject:string) {
+  async send(template: string, subject: string) {
     // 1) Render HTML based on a pug template
-    const html = pug.renderFile(`${__dirname}/../views/emailTemplates/${template}.pug`, {
-      firstName: this.firstName,
-      url: this.url,
-      subject,
-    }) ;
+    const html = pug.renderFile(
+      `${__dirname}/../views/emailTemplates/${template}.pug`,
+      {
+        firstName: this.firstName,
+        url: this.url,
+        subject,
+      }
+    );
 
     // 2) Define email options
     const mailOptions = {
@@ -46,22 +48,20 @@ class Email {
       to: this.to,
       subject,
       html,
-    }
+    };
 
     // 3) Create a transport and send email
     await this.newTransport().sendMail(mailOptions);
-
   }
-  
- 
+
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to the MovieBook Family!');
+    await this.send("welcome", "Welcome to the MovieBook Family!");
   }
 
   async sendPasswordReset() {
     await this.send(
-      'passwordReset',
-      'Your password reset token (valid for only 10 minutes)'
+      "passwordReset",
+      "Your password reset token (valid for only 10 minutes)"
     );
   }
 }
@@ -152,5 +152,4 @@ class Email {
 
 */
 
-
-export default Email
+export default Email;

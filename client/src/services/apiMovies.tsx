@@ -12,6 +12,5 @@ export async function apiMovies(query: string) {
   }
   const res = await fetch(url, options);
   const data = await res.json();
-  console.log(data);
   return data.results;
 }

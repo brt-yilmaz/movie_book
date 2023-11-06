@@ -44,7 +44,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 function MovieCard({ movieData }: { movieData: MovieData }) {
-  console.log("moviecard render oluyor");
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery("(max-width:480px)");
   const navigate = useNavigate();
