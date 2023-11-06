@@ -1,9 +1,9 @@
+import { useGetMovieDetailsQuery } from "../../services/movieDetailsApi.tsx";
 import MovieSkeleton from "../../ui/MovieSkeleton.tsx";
 import { MemoizedMovieCard } from "./MovieCard.tsx";
-import { useApiMovie } from "./useApiMovie.tsx";
 
 function MovieCardContainer({ id }: { id: string }) {
-  const { isLoading, movieDetails } = useApiMovie(id);
+  const { isLoading, data: movieDetails } = useGetMovieDetailsQuery(id);
 
   return isLoading ? (
     <MovieSkeleton />

@@ -1,19 +1,24 @@
 import { Box, IconButton, Stack, Typography } from "@mui/material";
-import { useApiMovies } from "./useApiMovies";
 import MoviesContainerSpinner from "../../ui/MoviesSpinnerContainer";
 import MovieCardContainer from "./MovieCardContainer";
 import { useTheme } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../../state/store";
 import { setSearchQuery } from "../../state/userSlice";
+import { useGetMoviesQuery } from "../../services/moviesApi";
 
 type MovieData = {
   id: string;
 };
 
 export default function MoviesContainer() {
-  const { isLoading, error, movies } = useApiMovies();
   const searchQuery = useAppSelector((state) => state.user.searchQuery);
+  const {
+    isLoading,
+    error,
+    data: movies,
+    isSuccess,
+  } = useGetMoviesQuery(searchQuery);
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -27,7 +32,7 @@ export default function MoviesContainer() {
 
   return (
     <Box>
-      {searchQuery && (
+      {isSuccess && (
         <Stack direction={"row"} justifyContent={"end"}>
           <IconButton
             sx={{
@@ -58,7 +63,7 @@ export default function MoviesContainer() {
         }}
       >
         {" "}
-        {movies.map((movie: MovieData) => (
+        {movies.results.map((movie: MovieData) => (
           <MovieCardContainer key={movie.id} id={movie.id} />
         ))}
       </Box>

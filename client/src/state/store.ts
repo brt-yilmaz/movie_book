@@ -13,11 +13,15 @@ import {
   persistReducer,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { movieDetailsApi } from "../services/movieDetailsApi";
+import { moviesApi } from "../services/moviesApi";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
   messages: messagesSlice.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [movieDetailsApi.reducerPath]: movieDetailsApi.reducer,
+  [moviesApi.reducerPath]: moviesApi.reducer,
 });
 
 const persistConfig = {
@@ -35,7 +39,10 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(userApi.middleware),
+    })
+      .concat(userApi.middleware)
+      .concat(movieDetailsApi.middleware)
+      .concat(moviesApi.middleware),
 });
 
 export const useAppDispatch: () => typeof store.dispatch = useDispatch;

@@ -9,4 +9,7 @@ export interface User {
   likedMovies: string[];
   friends: string[];
   occupation: string;
+  location: string;
+  viewedProfile: number;
+  impressions: number;
 }
