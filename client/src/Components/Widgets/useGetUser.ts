@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiGetUser } from "../../services/apiGetUser";
+import { useState } from "react";
 
 export const useGetUser = (userID: string) => {
   const {
@@ -11,5 +12,11 @@ export const useGetUser = (userID: string) => {
     queryFn: () => apiGetUser(userID),
   });
 
-  return { isLoading, error, user };
+  const [friendStatus, setIsFriendStatus] = useState(false);
+
+  if (user && user.friends.includes(userID)) {
+    setIsFriendStatus(true);
+  }
+
+  return { isLoading, error, user, friendStatus };
 };

@@ -9,6 +9,8 @@ import { getOne, getAll, deleteOne, updateOne } from "../utils/factory";
 import { UserDocument, Model } from "mongoose";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
+import { Types } from "mongoose";
+import { ObjectId } from "mongodb";
 dotenv.config();
 
 const s3 = new S3Client({
@@ -228,5 +230,58 @@ export const getFriends = catchAsync(
       }
     );
     res.status(200).json(formattedFriends);
+  }
+);
+
+export const addRemoveFriend = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id, friendId } = req.params;
+
+    const user = await User.findById(id);
+    const friend = await User.findById(friendId);
+
+    if (!user) {
+      return next(new AppError("No user found with that ID", 404));
+    }
+
+    if (!friend) {
+      return next(new AppError("No friend found with that ID", 404));
+    }
+    console.log(user.friends);
+    const isFriend = user.friends?.includes(friendId as any);
+
+    if (user.friends?.length === 0 || !isFriend) {
+      user.friends?.push(friendId as any);
+      friend?.friends?.push(id as any);
+    } else {
+      if (isFriend) {
+        user.friends = user.friends?.filter(
+          (friend) => friend.toString() !== friendId
+        );
+        friend.friends = friend?.friends?.filter(
+          (friend) => friend.toString() !== id
+        );
+      }
+    }
+
+    await user.save({ validateBeforeSave: false });
+    await friend?.save({ validateBeforeSave: false });
+
+    const friends = (await Promise.all(
+      user.friends?.map((id) => User.findById(id)) ?? []
+    )) as UserDocument[] | [];
+
+    const formattedFriends = friends.map(
+      ({ _id, name, occupation, location, photo }) => {
+        return { _id, name, occupation, location, photo };
+      }
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        friends: formattedFriends,
+      },
+    });
   }
 );

@@ -1,12 +1,16 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import Friend from "../Friends/Friend";
 import WidgetWrapper from "../../ui/WidgetWrapper";
-import { useGetFriends } from "./useGetFriends";
 import MovieSpinner from "../../ui/MovieSpinner";
+import { useGetUser } from "./useGetUser";
+import { useState } from "react";
 
-const FriendListWidget = ({ userId }: { userId: string | undefined }) => {
+const FriendListWidget = ({ userId }: { userId: string }) => {
   const { palette } = useTheme();
-  const { isLoading, error, friends } = useGetFriends(userId);
+  console.log(userId);
+  const { isLoading, user } = useGetUser(userId);
+  console.log(user);
+
   return isLoading ? (
     <Box>
       <MovieSpinner spinnerColor={"primary"} />
@@ -15,31 +19,19 @@ const FriendListWidget = ({ userId }: { userId: string | undefined }) => {
     <WidgetWrapper>
       <Typography
         color={palette.neutral.dark}
-        variant="h5"
+        variant="h6"
         fontWeight="500"
         sx={{ mb: "1.5rem" }}
       >
         Friend List
       </Typography>
-      <Box display="flex" flexDirection="column" gap="1.5rem">
-        {friends &&
-          friends.map(
-            (friend: {
-              _id: string;
-              name: string;
-              occupation: string;
-              photo: string;
-            }) => (
-              <Friend
-                key={friend._id}
-                friendId={friend._id}
-                name={friend.name}
-                subtitle={friend.occupation}
-                userPicturePath={friend.photo}
-              />
-            )
-          )}
-      </Box>
+      {user.friends.length > 0 && (
+        <Box display="flex" flexDirection="column" gap="1.5rem">
+          {user.friends.map((friendId: string) => (
+            <Friend key={friendId} friendId={friendId} />
+          ))}
+        </Box>
+      )}
     </WidgetWrapper>
   );
 };

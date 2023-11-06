@@ -71,9 +71,9 @@ export const userSlice = createSlice({
       state.searchQuery = action.payload;
     },
 
-    setFriends: (state, action: PayloadAction<User>) => {
+    setFriends: (state, action: PayloadAction<string[]>) => {
       if (state.user) {
-        state.user.friends = action.payload.friends;
+        state.user.friends = action.payload;
       } else {
         console.error("user friends non-existent :(");
       }

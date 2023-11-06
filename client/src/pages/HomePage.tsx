@@ -2,7 +2,7 @@ import UserWidget from "../Components/Widgets/UserWidget";
 import MoviesContainer from "../features/movies/MoviesCardContainer";
 import { styled } from "@mui/material/styles";
 import { useAppSelector } from "../state/store";
-import { useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import AdvertWidget from "../Components/Widgets/AdWidget";
 import FriendListWidget from "../Components/Widgets/FriendListWidget";
 
@@ -20,8 +20,10 @@ export default function HomePage() {
     <StyledHomePage>
       {userId && isDesktop && <UserWidget userId={userId} picturePath={""} />}
       <MoviesContainer />
-      {isTablet && <AdvertWidget />}
-      {userId && <FriendListWidget userId={userId} />}
+      <Box display={"flex"} flexDirection="column" gap="1.5rem">
+        {isTablet && <AdvertWidget />}
+        {userId && isTablet && <FriendListWidget userId={userId} />}
+      </Box>
     </StyledHomePage>
   );
 }

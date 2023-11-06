@@ -1,15 +1,14 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { login as loginApi } from "../../services/apiAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useAppDispatch } from "../../state/store";
 import { setLogin } from "../../state/userSlice";
 
-
 type LoginValues = {
   email: string;
   password: string;
-}
+};
 
 export function useLogin() {
   const navigate = useNavigate();
@@ -20,27 +19,18 @@ export function useLogin() {
     setIsLoading(true);
     try {
       const response = await loginApi({ email, password });
-      
+      console.log(response);
       dispatch(setLogin(response));
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       toast.error(`${error}`);
     } finally {
       setIsLoading(false);
     }
-
   };
 
   return { login, isLoading };
 }
-
-
-
-
-
-
-
-
 
 /* With React Query
 import { useMutation } from "@tanstack/react-query";

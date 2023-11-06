@@ -8,6 +8,6 @@ export const apiGetUser = async (userID: string) => {
   };
   const res = await fetch(url, options);
   const { data } = await res.json();
-  console.log(data);
-  return data;
+  console.log(data.data);
+  return data.data;
 };

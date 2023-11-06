@@ -11,6 +11,7 @@ import {
   restrictTo,
 } from "../controllers/authController";
 import {
+  addRemoveFriend,
   getFriends,
   getMe,
   getUser,
@@ -31,11 +32,11 @@ router.get("/verifyEmail/:token", verifyEmail);
 router.get("/me", getMe, getUser);
 router.get("/:id", getUser);
 router.get("/:id/friends", getFriends);
+router.patch("/:id/:friendId", addRemoveFriend);
 
 // Protect all routes after this middleware
 router.use(protect);
 router.patch("/likeMovie/:imdbID", likeMovie);
-router.patch("/:id/:friendId, addRemoveFriend");
 
 router.patch("/updateMyPassword", updatePassword);
 router.patch("/uploadProfilePhoto", uploadProfilePhotoAndResize);
