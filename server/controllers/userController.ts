@@ -277,11 +277,6 @@ export const addRemoveFriend = catchAsync(
       }
     );
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        friends: formattedFriends,
-      },
-    });
+    res.status(200).json(formattedFriends);
   }
 );

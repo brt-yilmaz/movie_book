@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./userSlice";
 import { messagesSlice } from "./messagesSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { userApi } from "../services/userApi";
 import {
   FLUSH,
   REHYDRATE,
@@ -16,6 +17,7 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
   user: userSlice.reducer,
   messages: messagesSlice.reducer,
+  [userApi.reducerPath]: userApi.reducer,
 });
 
 const persistConfig = {
@@ -33,7 +35,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(userApi.middleware),
 });
 
 export const useAppDispatch: () => typeof store.dispatch = useDispatch;

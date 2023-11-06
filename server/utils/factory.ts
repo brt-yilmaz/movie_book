@@ -59,12 +59,7 @@ export const getOne = <T>(model: Model<T>, popOptions: string[] = []) =>
     if (!doc) {
       return next(new AppError("No document found with that ID", 404));
     }
-    res.status(200).json({
-      status: "success",
-      data: {
-        data: doc,
-      },
-    });
+    res.status(200).json(doc);
   });
 
 export const getAll = <T>(model: Model<T>) =>
