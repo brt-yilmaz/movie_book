@@ -18,13 +18,12 @@ import Rating from "@mui/material/Rating";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useAppDispatch, useAppSelector } from "../../state/store";
-import { apiLikeMovie } from "../../services/apiLikeMovie";
-import { updateUserLikedMovies } from "../../state/userSlice";
+import { useAppSelector } from "../../state/store";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import React from "react";
+import { useGetUserQuery, useLikeMovieMutation } from "../../services/userApi";
 
 const baseMoviePosterUrl = "https://image.tmdb.org/t/p/w500";
 
@@ -44,11 +43,13 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 function MovieCard({ movieData }: { movieData: MovieData }) {
-  const dispatch = useAppDispatch();
   const isMobile = useMediaQuery("(max-width:480px)");
   const navigate = useNavigate();
   const token = useAppSelector((state) => state.user.token);
-  const user = useAppSelector((state) => state.user.user);
+  const currentUser = useAppSelector((state) => state.user.user);
+  const userId = currentUser?.id;
+
+  const { data: user, isSuccess } = useGetUserQuery(userId || "");
 
   const {
     imdb_id,
@@ -59,6 +60,7 @@ function MovieCard({ movieData }: { movieData: MovieData }) {
     title,
     release_date,
   } = movieData;
+  const [likeMovie] = useLikeMovieMutation();
 
   const Actors = credits?.cast
     ?.slice(0, 3)
@@ -70,8 +72,6 @@ function MovieCard({ movieData }: { movieData: MovieData }) {
     .map((c) => c.name)
     .join(", ");
 
-  const isUserLiked = user?.likedMovies?.includes(imdb_id);
-
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -80,9 +80,12 @@ function MovieCard({ movieData }: { movieData: MovieData }) {
 
   const handleLikeClick = async () => {
     try {
-      const res = await apiLikeMovie(imdb_id, token);
-      const likedMovies = res.data.user.likedMovies;
-      dispatch(updateUserLikedMovies(likedMovies));
+      if (!token) {
+        navigate("/login", { replace: true });
+        toast.success("Please login to like a movie");
+        return;
+      }
+      likeMovie({ imdbID: imdb_id, token });
     } catch (error) {
       navigate("/login", { replace: true });
       toast.success("Please login to like a movie");
@@ -141,7 +144,7 @@ function MovieCard({ movieData }: { movieData: MovieData }) {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
-            {isUserLiked ? (
+            {user?.likedMovies?.includes(imdb_id) ? (
               <FavoriteIcon color={"error"} />
             ) : (
               <FavoriteBorderOutlined />

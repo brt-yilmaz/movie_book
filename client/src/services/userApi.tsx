@@ -26,7 +26,23 @@ export const userApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+
+    likeMovie: build.mutation<User[], { imdbID: string; token: string }>({
+      query: ({ imdbID, token }) => ({
+        url: `/likeMovie/${imdbID}`,
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
-export const { useGetUserQuery, useAddRemoveFriendMutation } = userApi;
+export const {
+  useGetUserQuery,
+  useAddRemoveFriendMutation,
+  useLikeMovieMutation,
+} = userApi;
