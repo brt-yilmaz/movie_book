@@ -49,7 +49,7 @@ function MovieCard({ movieData }: { movieData: MovieData }) {
   const currentUser = useAppSelector((state) => state.user.user);
   const userId = currentUser?.id;
 
-  const { data: user, isSuccess } = useGetUserQuery(userId || "");
+  const { data: user } = useGetUserQuery(userId || "");
 
   const {
     imdb_id,

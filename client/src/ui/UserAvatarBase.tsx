@@ -1,11 +1,14 @@
 import { Avatar, Box } from "@mui/material";
 
 type Props = {
-  imageURL: string;
+  imageURL?: string;
   size?: number;
 };
 
-export default function UserImage({ imageURL, size = 35 }: Props) {
+export default function UserImage({
+  imageURL = "assets/default.jpg",
+  size = 35,
+}: Props) {
   return (
     <Box sx={{ cursor: "pointer" }}>
       <Avatar
