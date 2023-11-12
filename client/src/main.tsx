@@ -12,16 +12,15 @@ import ErrorFallback from './ui/ErrorFallback.tsx';
 import { store } from './state/store.ts';
 
 
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistStore(store)}>
+            <App />
+          </PersistGate>
+        </Provider>
+      </ErrorBoundary>
+    </React.StrictMode>
+  )
 
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistStore(store)}>
-          <App />
-        </PersistGate>
-      </Provider>
-    </ErrorBoundary>
-  </React.StrictMode>
-)

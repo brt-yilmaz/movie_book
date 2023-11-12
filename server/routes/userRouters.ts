@@ -9,6 +9,7 @@ import {
   updatePassword,
   verifyEmail,
   restrictTo,
+  isLoggedIn,
 } from "../controllers/authController";
 import {
   addRemoveFriend,
@@ -23,6 +24,8 @@ const router = express.Router();
 
 router.post("/signup", signup);
 router.post("/login", login);
+router.post("/login/isLoggedIn",isLoggedIn ,login);
+
 router.get("/logout", logout);
 
 router.post("/forgotPassword", forgotPassword);

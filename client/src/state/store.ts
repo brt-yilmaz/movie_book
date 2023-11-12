@@ -15,6 +15,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import { movieDetailsApi } from "../services/movieDetailsApi";
 import { moviesApi } from "../services/moviesApi";
+import {apiSlice} from "../state/apiSlice";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [movieDetailsApi.reducerPath]: movieDetailsApi.reducer,
   [moviesApi.reducerPath]: moviesApi.reducer,
+  [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 const persistConfig = {
@@ -42,8 +44,9 @@ export const store = configureStore({
     })
       .concat(userApi.middleware)
       .concat(movieDetailsApi.middleware)
-      .concat(moviesApi.middleware),
-});
+      .concat(moviesApi.middleware)
+      .concat(apiSlice.middleware),
+    });
 
 export const useAppDispatch: () => typeof store.dispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<

@@ -12,13 +12,22 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/userRouters";
 import reviewRouter from "./routes/reviewRouters";
 import movieRouter from "./routes/movieRouters";
-
+import authRoutes from './routes/authRoutes';
+import expressListRoutes from 'express-list-endpoints'; // to list all routes
+import cors from 'cors';
 // CONFIGURATIONS
 
 const app: Application = express();
 // app.enable('trust proxy');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
 
 // Set security HTTP headers
 app.use(helmet({
@@ -34,8 +43,10 @@ app.use(helmet({
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-app.use("/", express.static("./dist"));
-app.get("*", (req, res) => res.sendFile(__dirname + "/index.html"));
+
+// You can serve your frontend in production mode
+// app.use("/", express.static("./dist"));
+// app.get("*", (req, res) => res.sendFile(__dirname + "/index.html"));
 
 app.use(morgan("common"));
 
@@ -84,10 +95,13 @@ app.set("view engine", "pug");
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/movies", movieRouter);
+app.use("/api/v1/auth",authRoutes);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+
+console.log( expressListRoutes(app as any) ); // to get all routes
 
 app.use(globalErrorHandler);
 
