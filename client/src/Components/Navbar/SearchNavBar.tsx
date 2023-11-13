@@ -5,6 +5,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useAppDispatch } from "../../state/store";
 import {  useRef } from "react";
 import { setSearchQuery } from "../../state/userSlice";
+import { useNavigate } from "react-router-dom";
+
 
 const Search = styled("div")(({ theme }) => ({
   display: "flex",
@@ -54,6 +56,7 @@ export default function SearchNavBar({
   const dispatch = useAppDispatch();
   const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const inputRef = useRef();
+  const navigate = useNavigate();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -63,6 +66,8 @@ export default function SearchNavBar({
     if (value.length >= 3) {
       timerRef.current = setTimeout(() => {
         dispatch(setSearchQuery(value));
+        navigate("/")
+        
       }, 800);
     }
   };
