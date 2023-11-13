@@ -186,7 +186,6 @@ export const likeMovie = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { imdbID } = req.params;
     const user = req.user as UserDocument;
-    console.log(user);
     const isLiked = user.likedMovies?.includes(imdbID);
 
     if (isLiked) {

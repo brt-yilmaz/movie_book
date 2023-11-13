@@ -45,11 +45,14 @@ const createSendToken = async (
         ? jwtExpiresIn
         : Number(jwtExpiresIn) * 24 * 60 * 60 * 1000;
 
-    res.cookie("jwt", token, {
-      expires: new Date(Date.now() + expiresIn),
-      httpOnly: true, // Make sure to add the httpOnly option
-      secure: req.secure || req.headers["x-forwarded-proto"] === "https",
-    });
+        res.cookie("jwt", token, {
+          expires: new Date(Date.now() + expiresIn),
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          path: "/",
+        });
+        
 
     // Remove password from output
     user.password = undefined;
@@ -177,7 +180,8 @@ export const isLoggedIn = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<void> => {
+)=> {
+  console.log('first console inside isLoggedIn')
   if (req.cookies.jwt) {
     try {
       // 1) verify token
@@ -196,13 +200,25 @@ export const isLoggedIn = async (
       }
       // THERE IS A LOGGED IN USER
       res.locals.user = currentUser;
-      return next();
+      res.status(200).json({
+        status: "success",
+        token: req.cookies.jwt,
+        data: {
+          user: currentUser,
+        },
+      });
+        
     } catch (err) {
-      return next();
+      // Handle errors appropriately
+      console.error('Error during token verification:');
+      res.status(401).json({ status: "fail", message: "Unauthorized" });
     }
+  } else {
+    // No JWT found, proceed to the next middleware or route handler
+    next();
   }
-  next();
 };
+
 
 export const restrictTo = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {

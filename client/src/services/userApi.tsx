@@ -29,7 +29,7 @@ export const userApi = createApi({
 
     likeMovie: build.mutation<User[], { imdbID: string; token: string }>({
       query: ({ imdbID, token }) => ({
-        url: `/likeMovie/${imdbID}`,
+        url: `/likeMovies/likeMovie/${imdbID}`,
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

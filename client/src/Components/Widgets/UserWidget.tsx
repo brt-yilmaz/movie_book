@@ -7,7 +7,7 @@ import {
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 import FlexBetween from "../../ui/FlexBetween";
 import WidgetWrapper from "../../ui/WidgetWrapper";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserImage from "../../ui/UserAvatarBase";
 import { useGetUserQuery } from "../../services/userApi";
 import AdvertWidget from "./AdWidget";
@@ -135,7 +135,19 @@ const UserWidget = ({ userId, picturePath }: UserWidgetProps) => {
               </FlexBetween>
               <EditOutlined sx={{ color: main }} />
             </FlexBetween>
+            <FlexBetween gap="1rem" sx={{ marginTop: "1rem" }}> 
+                <Link to={`/${userId}/likedMovies`}> 
+                    
+                        
+                            <Typography color={main} fontWeight="500" sx={{ cursor: "pointer" }}>
+                                Liked Movies
+                            </Typography>
+                       
+                </Link>
+                    
+            </FlexBetween>
           </Box>
+          
         </WidgetWrapper>
       )}
     </>

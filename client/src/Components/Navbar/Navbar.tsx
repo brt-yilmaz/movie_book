@@ -8,13 +8,17 @@ import UserAvatar from "./UserAvatar";
 import { useTheme, useMediaQuery } from "@mui/material";
 import DarkModeIcon from "./DarkModeIcon";
 import SearchNavBar from "./SearchNavBar";
+import { useAppDispatch } from "../../state/store";
+import { setSearchQuery } from "../../state/userSlice";
 
 const Navbar = () => {
+  const dispatch = useAppDispatch()
   const theme = useTheme();
   const paper = theme.palette.background.paper;
   // const userName = useAppSelector((state) => state.user?.name) || "Guest";
   // const [open, setOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleSearchFocus = () => {
@@ -23,6 +27,8 @@ const Navbar = () => {
 
   const handleSearchBlur = () => {
     setIsSearchFocused(false);
+    setSearchText("");
+    
   };
 
   return (
@@ -36,6 +42,8 @@ const Navbar = () => {
                 onFocus={handleSearchFocus}
                 onBlur={handleSearchBlur}
                 isSearchFocused={isSearchFocused}
+                searchText={searchText}
+                setSearchText={setSearchText}
               />
               <Stack direction={"row"} alignItems={"center"} gap={2}>
                 <UserBox />

@@ -3,7 +3,7 @@ import InputBase from "@mui/material/InputBase";
 import { styled, alpha } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAppDispatch } from "../../state/store";
-import { useRef } from "react";
+import {  useRef } from "react";
 import { setSearchQuery } from "../../state/userSlice";
 
 const Search = styled("div")(({ theme }) => ({
@@ -39,19 +39,25 @@ type Props = {
   onFocus: () => void;
   onBlur: () => void;
   isSearchFocused: boolean;
+  searchText: string;
+  setSearchText: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function SearchNavBar({
   onFocus,
   onBlur,
   isSearchFocused,
+  searchText,
+  setSearchText,
+  
 }: Props) {
   const dispatch = useAppDispatch();
   const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
-  const inputRef = useRef(null);
+  const inputRef = useRef();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    setSearchText(value);
     clearTimeout(timerRef.current);
 
     if (value.length >= 3) {
@@ -60,6 +66,7 @@ export default function SearchNavBar({
       }, 800);
     }
   };
+
 
   return (
     <Search className={isSearchFocused ? "animate-fadeIn" : ""}>
@@ -72,6 +79,7 @@ export default function SearchNavBar({
         fullWidth={true}
         onChange={handleInputChange}
         ref={inputRef}
+        value={searchText}
       />
 
       {isSearchFocused ? (

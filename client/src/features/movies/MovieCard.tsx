@@ -85,6 +85,7 @@ function MovieCard({ movieData }: { movieData: MovieData }) {
         toast.success("Please login to like a movie");
         return;
       }
+      console.log(imdb_id, token);
       likeMovie({ imdbID: imdb_id, token });
     } catch (error) {
       navigate("/login", { replace: true });
