@@ -66,9 +66,9 @@ export default function MoviesContainer() {
         }}
       >
         {" "}
-        {((searchQuery && movies.results.length > 0) ? movies : popularMovies).results.map((movie: MovieData) => (
+        {((searchQuery && movies?.results.length > 0) ? movies : popularMovies)?.results.map((movie: MovieData) => (
           <MovieCardContainer key={movie.id} id={movie.id} />
-        ))}
+        ))}osman
       </Box>
     </Box>
   );
