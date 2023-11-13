@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "../../state/store";
 import { setSearchQuery } from "../../state/userSlice";
-import { useGetMoviesQuery } from "../../services/moviesApi";
+import { useGetMoviesQuery, useGetPopularMoviesQuery } from "../../services/moviesApi";
 
 type MovieData = {
   id: string;
@@ -21,6 +21,9 @@ export default function MoviesContainer() {
   } = useGetMoviesQuery(searchQuery);
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const {  data: popularMovies   } = useGetPopularMoviesQuery({
+    staleTime: 24 * 60 * 60 * 1000, // 24 hours
+  });
 
   if (isLoading) {
     return <MoviesContainerSpinner />;
@@ -30,26 +33,26 @@ export default function MoviesContainer() {
     return <div>No movie found !</div>;
   }
 
+  const infoColor = searchQuery ? theme.palette.error.main : theme.palette.primary.main
+
   return (
     <Box>
-      {isSuccess && (
-        <Stack direction={"row"} justifyContent={"end"}>
+        <Stack direction={"row"} justifyContent={`${ searchQuery && movies.results.length > 0 ? "flex-end" : "flex-start" }`}>
           <IconButton
             sx={{
               "&:hover": {
                 backgroundColor: "transparent",
-                color: (theme) => theme.palette.error.main,
+                color: infoColor,
               },
             }}
             onClick={() => {
               dispatch(setSearchQuery(""));
             }}
           >
-            <Typography variant="body1">Clear All </Typography>
-            <DeleteIcon sx={{ marginLeft: 1 }} />
+            <Typography variant="body1">{searchQuery ? "Clear Search" : "Popular Movies"} </Typography>
+            { searchQuery && <DeleteIcon sx={{ marginLeft: 1 }} />}
           </IconButton>
         </Stack>
-      )}
       <Box
         sx={{
           display: "flex",
@@ -63,7 +66,7 @@ export default function MoviesContainer() {
         }}
       >
         {" "}
-        {movies.results.map((movie: MovieData) => (
+        {((searchQuery && movies.results.length > 0) ? movies : popularMovies).results.map((movie: MovieData) => (
           <MovieCardContainer key={movie.id} id={movie.id} />
         ))}
       </Box>

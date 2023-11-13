@@ -3,13 +3,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const moviesApi = createApi({
   reducerPath: "moviesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.themoviedb.org/3/search/movie?query=",
+    baseUrl: "https://api.themoviedb.org/3",
   }),
-  tagTypes: ["Movies"],
+  tagTypes: ["Movies", "PopularMovies"],
   endpoints: (build) => ({
     getMovies: build.query({
       query: (searchQuery) => ({
-        url: `${searchQuery}`,
+        url: `/search/movie?query=${searchQuery}`,
         method: "GET",
         headers: {
           accept: "application/json",
@@ -18,7 +18,20 @@ export const moviesApi = createApi({
       }),
       providesTags: ["Movies"],
     }),
+    getPopularMovies: build.query({
+      query: () => ({
+        url: "/movie/popular",
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+        },
+      }),
+      providesTags: ["PopularMovies"],
+      
+    })
+
   }),
 });
 
-export const { useGetMoviesQuery } = moviesApi;
+export const { useGetMoviesQuery, useGetPopularMoviesQuery } = moviesApi;
