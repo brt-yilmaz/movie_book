@@ -45,11 +45,14 @@ const createSendToken = async (
         ? jwtExpiresIn
         : Number(jwtExpiresIn) * 24 * 60 * 60 * 1000;
 
-    res.cookie("jwt", token, {
-      expires: new Date(Date.now() + expiresIn),
-      httpOnly: true, // Make sure to add the httpOnly option
-      secure: req.secure || req.headers["x-forwarded-proto"] === "https",
-    });
+        res.cookie("jwt", token, {
+          expires: new Date(Date.now() + expiresIn),
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          path: "/",
+        });
+        
 
     // Remove password from output
     user.password = undefined;
@@ -197,7 +200,13 @@ export const isLoggedIn = async (
       }
       // THERE IS A LOGGED IN USER
       res.locals.user = currentUser;
-      res.status(200).json({ status: "success" });
+      res.status(200).json({
+        status: "success",
+        token: req.cookies.jwt,
+        data: {
+          user: currentUser,
+        },
+      });
         
     } catch (err) {
       // Handle errors appropriately
