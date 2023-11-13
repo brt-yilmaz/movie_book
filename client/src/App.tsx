@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import { useMemo } from "react";
 import { useAppSelector } from "./state/store";
 import AppLayout from "./ui/AppLayout";
+import UserLikedMovies from "./pages/UserLikedMovies";
 
 const App = () => {
   const mode = useAppSelector((state) => state.user.mode);
@@ -21,6 +22,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<AppLayout />}>
               <Route index element={<HomePage />} />
+              <Route path="/:id/likedMovies" element={<UserLikedMovies />} />
             </Route>
 
             <Route path={"/login"} element={<Login />} />
