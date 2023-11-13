@@ -101,7 +101,7 @@ app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-console.log( expressListRoutes(app as any) ); // to get all routes
+// console.log( expressListRoutes(app as any) ); // to get all routes
 
 app.use(globalErrorHandler);
 

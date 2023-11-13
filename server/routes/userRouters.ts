@@ -37,9 +37,9 @@ router.get("/:id", getUser);
 router.get("/:id/friends", getFriends);
 router.patch("/:id/:friendId", addRemoveFriend);
 
-router.patch("/likeMovie/:imdbID", likeMovie);
 // Protect all routes after this middleware
 router.use(protect);
+router.patch("/likeMovies/likeMovie/:imdbID" ,likeMovie);
 
 router.patch("/updateMyPassword", updatePassword);
 router.patch("/uploadProfilePhoto", uploadProfilePhotoAndResize);
