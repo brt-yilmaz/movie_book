@@ -11,6 +11,8 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
 import { Types } from "mongoose";
 import { ObjectId } from "mongodb";
+import Movie from "../models/movieModel";
+
 dotenv.config();
 
 const s3 = new S3Client({
@@ -188,13 +190,34 @@ export const likeMovie = catchAsync(
     const user = req.user as UserDocument;
     const isLiked = user.likedMovies?.includes(imdbID);
 
+    const movie = await Movie.findOne({ imdbID });
+    
+
     if (isLiked) {
       user.likedMovies = user.likedMovies?.filter((movie) => movie !== imdbID);
+
     } else {
       user.likedMovies?.push(imdbID);
     }
+    // check if movie is in database
+    if (movie) {
+      // check if movie is already liked by user
+      movie.likedBy = movie.likedBy?.filter(likedUser => likedUser.likedUserID !== user.id);
 
-    await user.save({ validateBeforeSave: false });
+      if(movie.likedBy.length === 0) {
+        await Movie.findOneAndRemove({ imdbID });
+
+      } else {  movie.save({ validateBeforeSave: false })}
+     
+      
+    } else {
+      const newMovie = new Movie({imdbID});
+      newMovie.likedBy = [{ likedUserID: user.id, likedUserPhoto: user.photo, likedUserName: user.name }];
+       newMovie.save({ validateBeforeSave: false });
+    }
+
+    user.save({ validateBeforeSave: false });
+    
 
     res.status(200).json({
       status: "success",

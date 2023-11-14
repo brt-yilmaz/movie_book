@@ -8,3 +8,14 @@ export const getOneMovie = getOne(Movie);
 export const createOneMovie = createOne(Movie);
 export const deleteOneMovie = deleteOne(Movie);
 export const updateOneMovie = updateOne(Movie);
+
+export const getMovie = catchAsync(async (req, res, next) => {
+  const movie = await Movie.findOne({imdbID: req.params.imdbID});
+
+  if (!movie) {
+    return next(new AppError("No movie found with that ID", 404));
+  }
+
+  res.status(200).json(movie)
+  
+})

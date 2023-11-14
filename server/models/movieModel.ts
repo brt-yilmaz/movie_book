@@ -3,43 +3,15 @@ import slugify from "slugify";
 
 const movieSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: [true, "Please provide movie title"],
-      unique: true,
-    },
-    slug: String,
-    description: {
-      type: String,
-      required: [true, "Please provide movie description"],
-    },
-    poster: {
-      type: String,
-      required: [true, "Please provide movie poster"],
-    },
-    video: {
-      type: String,
-    },
-    duration: {
-      type: Number,
-      required: [true, "Please provide movie duration"],
-    },
-    genre: {
-      type: String,
-      required: [true, "Please provide movie genre"],
-    },
-    imdbRating: {
-      type: Number,
-      required: [true, "Please provide movie imdbRating"],
-    },
-    director: {
-      type: String,
-      required: [true, "Please provide movie director"],
-    },
-    actors: {
-      type: String,
-      required: [true, "Please provide movie actors"],
-    },
+   imdbID: {
+    type: String,
+    unique: true,
+    required: true
+   },
+   likedBy: {
+    type: [],
+    default: []
+   },
   },
   {
     toJSON: { virtuals: true },
@@ -52,18 +24,18 @@ movieSchema.index({ imdbRating: 1 });
 movieSchema.index({ slug: 1 });
 
 // virtual populate
-movieSchema.virtual('reviews', {
-  ref: 'Review',
-  foreignField: 'movie',
-  localField: '_id'
-});
+// movieSchema.virtual('reviews', {
+//   ref: 'Review',
+//   foreignField: 'movie',
+//   localField: '_id'
+// });
 
-movieSchema.pre('save', async function (next) {
-  this.slug = slugify((this.title as string), { lower: true });
-  next();
-})
+// movieSchema.pre('save', async function (next) {
+//   this.slug = slugify((this.title as string), { lower: true });
+//   next();
+// })
 
 
 
-const Movie = mongoose.model('Movie', movieSchema);
+const Movie = mongoose.model('MovieTest', movieSchema);
 export default Movie;
