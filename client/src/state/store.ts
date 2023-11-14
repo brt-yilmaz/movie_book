@@ -7,6 +7,7 @@ import { userApi } from "../services/userApi";
 import { movieDetailsApi } from "../services/movieDetailsApi";
 import { moviesApi } from "../services/moviesApi";
 import {apiSlice} from "../state/apiSlice";
+import { moviesMongoDBApi } from "../services/movieMongoDBApi";
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   [movieDetailsApi.reducerPath]: movieDetailsApi.reducer,
   [moviesApi.reducerPath]: moviesApi.reducer,
   [apiSlice.reducerPath]: apiSlice.reducer,
+  [moviesMongoDBApi.reducerPath]: moviesMongoDBApi.reducer
 });
 
 export const store = configureStore({
@@ -24,7 +26,9 @@ export const store = configureStore({
       .concat(userApi.middleware)
       .concat(movieDetailsApi.middleware)
       .concat(moviesApi.middleware)
-      .concat(apiSlice.middleware),
+      .concat(apiSlice.middleware)
+      .concat(moviesMongoDBApi.middleware),
+
     });
 
 export const useAppDispatch: () => typeof store.dispatch = useDispatch;

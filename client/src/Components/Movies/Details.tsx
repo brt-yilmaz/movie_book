@@ -12,17 +12,13 @@ const StyledTitle1 = styled("div")({
   lineHeight: "1.2",
 })
 
-const StyledTitle2 = styled("div")({
-  color: "#C7C1BA",
-  fontSize: "1.5rem",
-  fontWeight: "normal",
-  marginBottom: "1rem",
-})
+
 export default function Details({vote_average, likeCount, movie}: { vote_average: number, likeCount: number, movie: MovieData}) {
   return (
     <StyledDetails> 
       <StyledTitle1> {movie.title} </StyledTitle1> 
-      <StyledTitle2> Details </StyledTitle2> 
+      <div style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "1rem", marginTop: "1rem"}}>
+
       <Rating
               name="read-only"
               value={vote_average}
@@ -31,10 +27,13 @@ export default function Details({vote_average, likeCount, movie}: { vote_average
               precision={0.1}
             />
       
+      <div style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "0.5rem"}}>
 
       <FavoriteIcon color={"error"} />
       
-      <span style={{ marginLeft: "24px" }}>{likeCount === 1 ? likeCount + " like" : likeCount > 1 ? likeCount + " likes" : 'No Like'}</span>
+      <span >{likeCount === 1 ? likeCount + " like" : likeCount > 1 ? likeCount + " likes" : 'No Like'}</span>
+      </div>
+      </div>
       
     </StyledDetails>
   )
