@@ -29,9 +29,15 @@ export const moviesApi = createApi({
       }),
       providesTags: ["PopularMovies"],
       
+    }),
+    getMovieFromOurs: build.query({
+      query: (imdbID) => ({
+        url: `/movie/${imdbID}`,
+        method: "GET",
+      })
     })
 
   }),
 });
 
-export const { useGetMoviesQuery, useGetPopularMoviesQuery } = moviesApi;
+export const { useGetMoviesQuery, useGetPopularMoviesQuery, useGetMovieFromOursQuery } = moviesApi;

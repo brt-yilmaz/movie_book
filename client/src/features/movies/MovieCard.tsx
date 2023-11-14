@@ -12,14 +12,14 @@ import { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { styled } from "@mui/material/styles";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-import ShareIcon from "@mui/icons-material/Share";
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { getGenreColor } from "../../helperFunctions/getGenreColor";
 import Rating from "@mui/material/Rating";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Collapse from "@mui/material/Collapse";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAppSelector } from "../../state/store";
-import { FavoriteBorderOutlined } from "@mui/icons-material";
+import { FavoriteBorderOutlined, KeyboardArrowDown } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import React from "react";
@@ -151,8 +151,9 @@ function MovieCard({ movieData }: { movieData: MovieData }) {
               <FavoriteBorderOutlined />
             )}
           </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
+          <IconButton aria-label="share" onClick={() => navigate(`/movies/${imdb_id}`)}>
+            <Typography variant={"body1"} sx={{ color: "#81e6d9", marginRight: 1 }}>Go to Movie</Typography>
+            <KeyboardDoubleArrowRightIcon />
           </IconButton>
           <ExpandMore
             expand={expanded}

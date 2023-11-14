@@ -52,4 +52,5 @@ interface MovieData {
   vote_average: number;
   imdb_id: string;
   release_date: string;
+  poster_path: string;
 }
