@@ -53,4 +53,5 @@ interface MovieData {
   imdb_id: string;
   release_date: string;
   poster_path: string;
+  overview: string;
 }

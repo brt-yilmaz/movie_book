@@ -25,7 +25,7 @@ export default function MovieDetailsPage({movie}: {movie: MovieData}) {
 
           
         </Hero>
-        <Description description={'description'}  likedUsers={getMovieFromOurs?.likedBy || []}  />
+        <Description genres={movie.genres} description={movie.overview}  likedUsers={getMovieFromOurs?.likedBy || []}  />
       </MovieContainer>
     </MovieDetailsContainer>
   )

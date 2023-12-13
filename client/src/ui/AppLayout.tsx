@@ -13,7 +13,7 @@ const Main = styled("main")(({ theme }) => ({
 }));
 
 const Container = styled("div")({
-  maxWidth: "120rem",
+  maxWidth: "90rem",
   margin: "0 auto",
   display: "flex",
   flexDirection: "column",
